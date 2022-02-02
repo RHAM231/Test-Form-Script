@@ -29,13 +29,21 @@ s = Service("./chromedriver")
 driver = webdriver.Chrome(service=s)
 print(driver)
 
+# driver.find_element_by_id()
 
-text_question_element_class = \
-    "quantumWizTextinputPaperinputInput"
-checkbox_question_element_class = \
-    "appsMaterialWizToggleRadiogroupOffRadio"
-submit_element_class = \
-    '//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div/div/span/span'
+# Not sure if I want to use a dictionary or direct variables here
+my_site_input_tags = {
+    'name_question_element_id': 'id_name',
+    'email_question_element_id': 'id_sender',
+    'subject_question_element_id': 'id_subject',
+    'message_question_element_id': 'id_message',
+    'submit_element_class': 'frm_btn',
+}
+name_question_element_id = 'id_name'
+email_question_element_id = 'id_sender'
+subject_question_element_id = 'id_subject'
+message_question_element_id = 'id_message'
+submit_element_class = 'frm_btn'
 
 
 # def answerNameAge(driver, df, element_class, user_id):
