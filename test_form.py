@@ -27,23 +27,19 @@ from selenium.webdriver.chrome.service import Service
 
 s = Service("./chromedriver")
 driver = webdriver.Chrome(service=s)
-print(driver)
 
-# driver.find_element_by_id()
 
-# Not sure if I want to use a dictionary or direct variables here
-my_site_input_tags = {
-    'name_question_element_id': 'id_name',
-    'email_question_element_id': 'id_sender',
-    'subject_question_element_id': 'id_subject',
-    'message_question_element_id': 'id_message',
-    'submit_element_class': 'frm_btn',
-}
+# Use driver.find_element_by_id() as well as class
 name_question_element_id = 'id_name'
 email_question_element_id = 'id_sender'
 subject_question_element_id = 'id_subject'
 message_question_element_id = 'id_message'
+cc_myself_checkbox_element_id = 'id_cc_myself'
 submit_element_class = 'frm_btn'
+
+
+def answerNameQuestion(driver, df, element_id, user_id):
+    name = df
 
 
 # def answerNameAge(driver, df, element_class, user_id):
