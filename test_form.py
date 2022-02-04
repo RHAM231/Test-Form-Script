@@ -63,7 +63,7 @@ mscfa = {
 
 # Grab our questions and answers and zip together
 def answerTextQuestions(driver, mscfa):
-    name, = mscfa['name']
+    name = mscfa['name']
     email = mscfa['email']
     subject = mscfa['subject']
     message = mscfa['message']
@@ -71,6 +71,13 @@ def answerTextQuestions(driver, mscfa):
     questions = retrieveTextElements(driver)
     for a, q in zip(answers, questions):
         q.send_keys(a)
+    return driver
+
+
+def answerCheckBox(driver, mscfa):
+    cc_myself = mscfa['cc_myself']
+    driver.find_elements_by_class_name(
+        element_class)[color_answer_index].click()
     return driver
 
 
