@@ -30,12 +30,23 @@ from selenium.webdriver.chrome.service import Service
 
 
 # Use driver.find_element_by_id() as well as class
-name_question_element_id = 'id_name'
-email_question_element_id = 'id_sender'
-subject_question_element_id = 'id_subject'
-message_question_element_id = 'id_message'
-cc_myself_checkbox_element_id = 'id_cc_myself'
-submit_element_class = 'frm_btn'
+def retrieveTextElements(driver):
+    name_question_element_id = driver.find_element_by_id('id_name')
+    email_question_element_id = driver.find_element_by_id('id_sender')
+    subject_question_element_id = driver.find_element_by_id('id_subject')
+    message_question_element_id = driver.find_element_by_id('id_message')
+    cc_myself_checkbox_element_id = driver.find_element_by_id('id_cc_myself')
+    submit_element_class = driver.find_elements_by_class_name('frm_btn')
+
+
+# 'id_cc_myself'
+def retrieveCheckboxElement(driver, elementID):
+    return driver.find_element_by_id(elementID)
+
+# 'frm_btn'
+def retrieveSubmitElement(driver, elementID):
+    return driver.find_elements_by_class_name(elementID)
+
 
 # My Site Contact Form Answers
 mscfa = {
@@ -53,8 +64,10 @@ mscfa = {
 def answerTextQuestions(driver, mscfa, element_id=None, user_id=None):
     name = mscfa['name']
     email = mscfa['email']
-    subject = ms
+    subject = mscfa['subject']
     message = mscfa['message']
+    answers = [name, email, subject, message]
+    questions = 
 
 
     print(name)
