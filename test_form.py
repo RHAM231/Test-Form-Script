@@ -61,6 +61,7 @@ mscfa = {
 }
 
 
+# Grab our questions and answers and zip together
 def answerTextQuestions(driver, mscfa):
     name, = mscfa['name']
     email = mscfa['email']
