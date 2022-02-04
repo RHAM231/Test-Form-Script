@@ -76,8 +76,7 @@ def answerTextQuestions(driver, mscfa):
 
 def answerCheckBox(driver, mscfa):
     cc_myself = mscfa['cc_myself']
-    driver.find_elements_by_class_name(
-        element_class)[color_answer_index].click()
+    retrieveCheckboxElement(driver, 'id_cc_myself').click()
     return driver
 
 
