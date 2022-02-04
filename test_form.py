@@ -1,23 +1,16 @@
 # Python Base Imports
-import time
-import json
-from datetime import datetime
-import pathlib
-import glob
-import sys
-sys.path.append(".")
+# import time
+# import json
+# from datetime import datetime
+# import pathlib
+# import glob
+# import sys
+# sys.path.append(".")
 
 # Installed Packages
 from selenium import webdriver
 # Import Service to resolve executable_path deprecation issue
 from selenium.webdriver.chrome.service import Service
-# import pandas as pd
-# import faker
-# import numpy as np
-
-
-
-# https://towardsdatascience.com/automating-submission-forms-with-python-94459353b03e
 
 
 ##############################################################################
@@ -25,8 +18,12 @@ from selenium.webdriver.chrome.service import Service
 ##############################################################################
 
 
-# s = Service("./chromedriver")
-# driver = webdriver.Chrome(service=s)
+# https://towardsdatascience.com/automating-submission-forms-with-python-94459353b03e
+
+
+##############################################################################
+# FUNCTIONS
+##############################################################################
 
 
 # Use driver.find_element_by_id() as well as class
@@ -38,7 +35,6 @@ def retrieveTextElements(driver):
     return [name_element, email_element, subject_element, message_element]
 
 
-
 # 'id_cc_myself'
 def retrieveCheckboxElement(driver, elementID):
     return driver.find_element_by_id(elementID)
@@ -46,19 +42,6 @@ def retrieveCheckboxElement(driver, elementID):
 # 'frm_btn'
 def retrieveSubmitElement(driver, elementID):
     return driver.find_elements_by_class_name(elementID)
-
-
-# My Site Contact Form Answers
-mscfa = {
-    'name': 'Python Test Script',
-    'email': 'nogardjmj@gmail.com',
-    'subject': 'Selenium Test',
-    'message': (
-        'This is an automated test performed '
-        'by test_form.py using Selenium.'
-        ),
-    'cc_myself': 'Uknwown'
-}
 
 
 # Grab our questions and answers and zip together
@@ -74,9 +57,9 @@ def answerTextQuestions(driver, mscfa):
     return driver
 
 
-def answerCheckBox(driver, mscfa):
+def answerCheckBox(driver, mscfa, element_id):
     cc_myself = mscfa['cc_myself']
-    retrieveCheckboxElement(driver, 'id_cc_myself').click()
+    retrieveCheckboxElement(driver, element_id).click()
     return driver
 
 
@@ -84,6 +67,39 @@ def answerCheckBox(driver, mscfa):
 def submit(driver, element_class):
     driver.find_element_by_xpath(element_class).click()
     return driver
+
+
+##############################################################################
+# TEST DATA
+##############################################################################
+
+
+# My Site Contact Form Answers
+mscfa = {
+    'name': 'Python Test Script',
+    'email': 'nogardjmj@gmail.com',
+    'subject': 'Selenium Test',
+    'message': (
+        'This is an automated test performed '
+        'by test_form.py using Selenium.'
+        ),
+    'cc_myself': 'Uknwown'
+}
+
+
+##############################################################################
+# DRIVING CODE
+##############################################################################
+
+
+url = "https://rexhmitchell.com/contact/"
+s = Service("./chromedriver")
+driver = webdriver.Chrome(service=s)
+driver.get(url)
+driver.maximize_window()
+driver = answerTextQuestions(driver, mscfa)
+driver = answerCheckBox(driver, mscfa, 'id_cc_myself')
+driver = submit(driver, 'frm_btn')
 
 
 # def answerNameAge(driver, df, element_class, user_id):
