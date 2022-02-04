@@ -74,6 +74,7 @@ def answerTextQuestions(driver, mscfa):
     return driver
 
 
+# Grab our button and submit our form
 def submit(driver, element_class):
     driver.find_element_by_xpath(element_class).click()
     return driver
