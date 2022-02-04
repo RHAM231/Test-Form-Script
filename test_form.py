@@ -25,8 +25,8 @@ from selenium.webdriver.chrome.service import Service
 ##############################################################################
 
 
-s = Service("./chromedriver")
-driver = webdriver.Chrome(service=s)
+# s = Service("./chromedriver")
+# driver = webdriver.Chrome(service=s)
 
 
 # Use driver.find_element_by_id() as well as class
@@ -37,10 +37,30 @@ message_question_element_id = 'id_message'
 cc_myself_checkbox_element_id = 'id_cc_myself'
 submit_element_class = 'frm_btn'
 
+# My Site Contact Form Answers
+mscfa = {
+    'name': 'Python Test Script',
+    'email': 'nogardjmj@gmail.com',
+    'subject': 'Selenium Test',
+    'message': (
+        'This is an automated test performed '
+        'by test_form.py using Selenium.'
+        ),
+    'cc_myself': 'Uknwown'
+}
 
-def answerNameQuestion(driver, df, element_id, user_id):
-    name = df
 
+def answerTextQuestions(driver, mscfa, element_id=None, user_id=None):
+    name = mscfa['name']
+    email = mscfa['email']
+    subject = ms
+    message = mscfa['message']
+
+
+    print(name)
+
+
+call = answerTextQuestions()
 
 # def answerNameAge(driver, df, element_class, user_id):
 #     name = df["names"][user_id]
