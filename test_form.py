@@ -5,6 +5,8 @@
 from selenium import webdriver
 # Import Service to resolve executable_path deprecation issue
 from selenium.webdriver.chrome.service import Service
+# Import "By" so we can get our submit button by xpath
+from selenium.webdriver.common.by import By
 
 
 ##############################################################################
@@ -95,9 +97,9 @@ driver = webdriver.Chrome(service=s)
 driver.get(url)
 
 
-# '//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div/div/span/span'
-submit_element = ''
-test = driver.find_element_by_xpath(submit_element)
+submit_xpath = '/html/body/div/div[2]/form/div[7]/input'
+# Switched to find_element() instead
+test = driver.find_element(By.xpath(submit_xpath))
 
 print(test)
 
