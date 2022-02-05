@@ -28,10 +28,10 @@ from selenium.webdriver.common.by import By
 # Use driver.find_element_by_id() as well as class
 def retrieveTextElements(driver):
     # Use "driver.find_element(By.ID, '')" instead
-    name_element = driver.find_element_by_id('id_name')
-    email_element = driver.find_element_by_id('id_sender')
-    subject_element = driver.find_element_by_id('id_subject')
-    message_element = driver.find_element_by_id('id_message')
+    name_element = driver.find_element(By.ID, 'id_name')
+    email_element = driver.find_element(By.ID, 'id_sender')
+    subject_element = driver.find_element(By.ID, 'id_subject')
+    message_element = driver.find_element(By.ID, 'id_message')
     return [name_element, email_element, subject_element, message_element]
 
 
