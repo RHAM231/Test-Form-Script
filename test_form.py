@@ -26,11 +26,11 @@ from selenium.webdriver.common.by import By
 
 
 # Find elements by id's as well as classes
-def retrieveTextElements(driver):
-    name_element = driver.find_element(By.ID, 'id_name')
-    email_element = driver.find_element(By.ID, 'id_sender')
-    subject_element = driver.find_element(By.ID, 'id_subject')
-    message_element = driver.find_element(By.ID, 'id_message')
+def retrieveContactFormTextElements(driver):
+    name_element = driver.find_element(By.ID, mySiteData['nameID'])
+    email_element = driver.find_element(By.ID, mySiteData['senderID'])
+    subject_element = driver.find_element(By.ID, mySiteData['subjectID'])
+    message_element = driver.find_element(By.ID, mySiteData['messageID'])
     return [name_element, email_element, subject_element, message_element]
 
 
@@ -41,7 +41,7 @@ def answerTextQuestions(driver, mscfa):
     subject = mscfa['subject']
     message = mscfa['message']
     answers = [name, email, subject, message]
-    questions = retrieveTextElements(driver)
+    questions = retrieveContactFormTextElements(driver)
     for a, q in zip(answers, questions):
         q.send_keys(a)
     return driver
@@ -61,6 +61,19 @@ def submit(driver, element_class):
 ##############################################################################
 # TEST DATA
 ##############################################################################
+
+
+# The url for the contact form and the form element id's and classes
+# for my site
+mySiteData = {
+    'url': 'https://rexhmitchell.com/contact/',
+    'nameID': 'id_name',
+    'senderID': 'id_sender',
+    'subjectID': 'id_subject',
+    'messageID': 'id_message',
+    'checkboxID': 'id_cc_myself',
+    'submitID': 'frm-btn',
+}
 
 
 # My Site Contact Form Answers
@@ -88,51 +101,8 @@ driver.get(url)
 
 driver.maximize_window()
 driver = answerTextQuestions(driver, mscfa)
-driver = answerCheckBox(driver, mscfa, 'id_cc_myself')
-driver = submit(driver, 'frm-btn')
-
-
-# def answerNameAge(driver, df, element_class, user_id):
-#     name = df["names"][user_id]
-#     age = df["ages"][user_id]
-#     text_answers = [name, str(age)] # following the order in the form
-#     text_questions = driver.find_elements_by_class_name(element_class)
-#     for a,q in zip(text_answers,text_questions):
-#         q.send_keys(a)
-#     return driver
-
-
-# def answerCheckBox(driver, df, element_class, user_id):
-#     color_answer = df["colors"][user_id]
-#     color_answer_index = color_index_dict[color_answer]
-#     driver.find_elements_by_class_name(
-#         element_class)[color_answer_index].click()
-#     return driver
-
-
-# def submit(driver, element_class):
-#     driver.find_element_by_xpath(element_class).click()
-#     return driver
-
-
-# df = pd.read_csv("./submission_form_database.csv")
-# text_question_element_class = "quantumWizTextinputPaperinputInput"
-# checkbox_question_element_class = "appsMaterialWizToggleRadiogroupOffRadio"
-
-# url = "https://forms.gle/WY7E9N8wkiMtziTD9"
-# driver = webdriver.Chrome(executable_path="./chromedriver")
-# for user_id in range(len(df)):
-#     driver.get(url)
-    
-#     driver.maximize_window()
-#     driver = answerNameAge(driver, df, text_question_element_class, user_id)
-#     driver = answerCheckBox(
-#         driver, 
-#         df, 
-#         checkbox_question_element_class, 
-#         user_id
-#         )
-#     driver = submit(driver, submit_element_class)
+driver = answerCheckBox(driver, mySiteData['checkboxID'])
+driver = submit(driver, mySiteData['submitID'])
 
 
 ##############################################################################
