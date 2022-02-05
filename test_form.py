@@ -25,23 +25,13 @@ from selenium.webdriver.common.by import By
 ##############################################################################
 
 
-# Use driver.find_element_by_id() as well as class
+# Find elements by id's as well as classes
 def retrieveTextElements(driver):
     name_element = driver.find_element(By.ID, 'id_name')
     email_element = driver.find_element(By.ID, 'id_sender')
     subject_element = driver.find_element(By.ID, 'id_subject')
     message_element = driver.find_element(By.ID, 'id_message')
     return [name_element, email_element, subject_element, message_element]
-
-
-
-# 'id_cc_myself'
-def retrieveCheckboxElement(driver, elementID):
-    return driver.find_element(By.ID, elementID)
-
-# 'frm-btn'
-def retrieveSubmitElement(driver, element_class):
-    return driver.find_element(By.CLASS_NAME, element_class)
 
 
 # Grab our questions and answers and zip together
@@ -57,16 +47,14 @@ def answerTextQuestions(driver, mscfa):
     return driver
 
 
-def answerCheckBox(driver, mscfa, element_id):
-    cc_myself = mscfa['cc_myself']
-    retrieveCheckboxElement(driver, element_id).click()
+def answerCheckBox(driver, element_id):
+    driver.find_element(By.ID, element_id).click()
     return driver
 
 
 # Grab our button and submit our form
 def submit(driver, element_class):
     driver.find_element(By.CLASS_NAME, element_class).click()
-    # driver.find_element_by_xpath(element_class).click()
     return driver
 
 
@@ -98,15 +86,9 @@ s = Service("./chromedriver")
 driver = webdriver.Chrome(service=s)
 driver.get(url)
 
-
-# submit_xpath = '/html/body/div/div[2]/form/div[7]/input'
-# Switched to find_element() instead
-# test = driver.find_element(By.CLASS_NAME, 'frm-btn')
-# print(test)
-
 driver.maximize_window()
 driver = answerTextQuestions(driver, mscfa)
-# driver = answerCheckBox(driver, mscfa, 'id_cc_myself')
+driver = answerCheckBox(driver, mscfa, 'id_cc_myself')
 driver = submit(driver, 'frm-btn')
 
 
