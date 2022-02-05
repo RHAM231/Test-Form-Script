@@ -5,7 +5,7 @@
 from selenium import webdriver
 # Import Service to resolve executable_path deprecation issue
 from selenium.webdriver.chrome.service import Service
-# Import "By" so we can get our submit button by xpath
+# Import "By" to resolve find_element() deprecation issues
 from selenium.webdriver.common.by import By
 
 
@@ -21,7 +21,7 @@ from selenium.webdriver.common.by import By
 
 
 ##############################################################################
-# FUNCTIONS
+# CONTACT FORM TEST FUNCTIONS
 ##############################################################################
 
 
@@ -37,10 +37,10 @@ def retrieveContactFormTextElements(driver):
 # Grab our questions and answers and zip them together. Fill out our
 # form with the answers and return our updated driver
 def answerContactFormTextQuestions(driver, siteData):
-    name = mscfa['name']
-    email = mscfa['email']
-    subject = mscfa['subject']
-    message = mscfa['message']
+    name = siteData['nameANSWER']
+    email = siteData['emailANSWER']
+    subject = siteData['subjectANSWER']
+    message = siteData['messageANSWER']
     answers = [name, email, subject, message]
     questions = retrieveContactFormTextElements(driver)
     for a, q in zip(answers, questions):
@@ -78,14 +78,14 @@ mySiteData = {
     'checkboxID': 'id_cc_myself',
     'submitID': 'frm-btn',
     # My contact form automated answers
-    'name': 'Python Test Script',
-    'email': 'nogardjmj@gmail.com',
-    'subject': 'Selenium Test',
-    'message': (
+    'nameANSWER': 'Python Test Script',
+    'emailANSWER': 'nogardjmj@gmail.com',
+    'subjectANSWER': 'Selenium Test',
+    'messageANSWER': (
         'This is an automated test performed '
         'by test_form.py using Selenium.'
         ),
-    'cc_myself': 'Uknwown'
+    'cc_myselfANSWER': 'Uknwown'
 }
 
 
@@ -100,14 +100,14 @@ HMSiteData = {
     'checkboxID': 'id_cc_myself',
     'submitID': 'frm-btn',
     # Hope Medical's contact form automated answers
-    'name': 'Rex Mitchell',
-    'email': 'nogardjmj@gmail.com',
-    'subject': 'Automated Python Test',
-    'message': (
+    'nameANSWER': 'Rex Mitchell',
+    'emailANSWER': 'nogardjmj@gmail.com',
+    'subjectANSWER': 'Automated Python Test',
+    'messageANSWER': (
         'This is an automated test to verify the contact form is working'
         ' properly.'
         ),
-    'cc_myself': 'Uknwown'
+    'cc_myselfANSWER': 'Uknwown'
 }
 
 
@@ -116,16 +116,23 @@ HMSiteData = {
 ##############################################################################
 
 
+# Run our test contact form functions above to test if a contact form
+# on a given live site is working properly
 def test_live_contact_form(siteData):
+    # Get our url from our given data, initialize Selenium's driver and
+    # pass our url to driver
     url = siteData['url']
     s = Service("./chromedriver")
     driver = webdriver.Chrome(service=s)
     driver.get(url)
 
+    # Open the form in Chrome, fill it out, and submit it
     driver.maximize_window()
     driver = answerContactFormTextQuestions(driver, siteData)
     driver = answerCheckBox(driver, mySiteData['checkboxID'])
     driver = submit(driver, mySiteData['submitID'])
+
+    # Terminate our driver so our script will stop
     driver.quit()
 
 
