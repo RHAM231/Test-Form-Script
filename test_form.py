@@ -36,7 +36,7 @@ def retrieveContactFormTextElements(driver):
 
 # Grab our questions and answers and zip them together. Fill out our
 # form with the answers and return our updated driver
-def answerContactFormTextQuestions(driver, mscfa):
+def answerContactFormTextQuestions(driver, siteData):
     name = mscfa['name']
     email = mscfa['email']
     subject = mscfa['subject']
@@ -68,18 +68,16 @@ def submit(driver, element_class):
 # The url for the contact form and the form element id's and classes
 # for my site
 mySiteData = {
+    # My contact form url
     'url': 'https://rexhmitchell.com/contact/',
+    # My contact form html id's and classes
     'nameID': 'id_name',
     'senderID': 'id_sender',
     'subjectID': 'id_subject',
     'messageID': 'id_message',
     'checkboxID': 'id_cc_myself',
     'submitID': 'frm-btn',
-}
-
-
-# My Site Contact Form Answers
-mscfa = {
+    # My contact form automated answers
     'name': 'Python Test Script',
     'email': 'nogardjmj@gmail.com',
     'subject': 'Selenium Test',
@@ -91,21 +89,44 @@ mscfa = {
 }
 
 
+HMSiteData = {
+    # Hope Medical's contact form url
+    'url': '',
+    # Hope Medical's contact form html id's and classes
+    'nameID': 'id_name',
+    'senderID': 'id_sender',
+    'subjectID': 'id_subject',
+    'messageID': 'id_message',
+    'checkboxID': 'id_cc_myself',
+    'submitID': 'frm-btn',
+    # Hope Medical's contact form automated answers
+    'name': 'Rex Mitchell',
+    'email': 'nogardjmj@gmail.com',
+    'subject': 'Automated Python Test',
+    'message': (
+        'This is an automated test to verify the contact form is working'
+        ' properly.'
+        ),
+    'cc_myself': 'Uknwown'
+}
+
+
 ##############################################################################
 # DRIVING CODE
 ##############################################################################
 
 
-url = mySiteData['url']
-s = Service("./chromedriver")
-driver = webdriver.Chrome(service=s)
-driver.get(url)
+def test_live_contact_form(siteData):
+    url = siteData['url']
+    s = Service("./chromedriver")
+    driver = webdriver.Chrome(service=s)
+    driver.get(url)
 
-driver.maximize_window()
-driver = answerContactFormTextQuestions(driver, mscfa)
-driver = answerCheckBox(driver, mySiteData['checkboxID'])
-driver = submit(driver, mySiteData['submitID'])
-driver.quit()
+    driver.maximize_window()
+    driver = answerContactFormTextQuestions(driver, siteData)
+    driver = answerCheckBox(driver, mySiteData['checkboxID'])
+    driver = submit(driver, mySiteData['submitID'])
+    driver.quit()
 
 
 ##############################################################################
