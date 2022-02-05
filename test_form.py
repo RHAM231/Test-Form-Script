@@ -37,8 +37,8 @@ def retrieveCheckboxElement(driver, elementID):
     return driver.find_element_by_id(elementID)
 
 # 'frm_btn'
-def retrieveSubmitElement(driver, elementID):
-    return driver.find_elements_by_class_name(elementID)
+def retrieveSubmitElement(driver, element_class):
+    return driver.find_elements_by_class_name(element_class)
 
 
 # Grab our questions and answers and zip together
@@ -93,10 +93,17 @@ url = "https://rexhmitchell.com/contact/"
 s = Service("./chromedriver")
 driver = webdriver.Chrome(service=s)
 driver.get(url)
-driver.maximize_window()
-driver = answerTextQuestions(driver, mscfa)
+
+
+test = driver.find_element_by_xpath('frm_btn')
+
+print(test)
+
+
+# driver.maximize_window()
+# driver = answerTextQuestions(driver, mscfa)
 # driver = answerCheckBox(driver, mscfa, 'id_cc_myself')
-driver = submit(driver, 'frm_btn')
+# driver = submit(driver, 'frm_btn')
 
 
 # def answerNameAge(driver, df, element_class, user_id):
