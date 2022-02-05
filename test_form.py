@@ -27,6 +27,7 @@ from selenium.webdriver.common.by import By
 
 # Use driver.find_element_by_id() as well as class
 def retrieveTextElements(driver):
+    # Use "driver.find_element(By.ID, '')" instead
     name_element = driver.find_element_by_id('id_name')
     email_element = driver.find_element_by_id('id_sender')
     subject_element = driver.find_element_by_id('id_subject')
@@ -34,11 +35,12 @@ def retrieveTextElements(driver):
     return [name_element, email_element, subject_element, message_element]
 
 
+
 # 'id_cc_myself'
 def retrieveCheckboxElement(driver, elementID):
     return driver.find_element_by_id(elementID)
 
-# 'frm_btn'
+# 'frm-btn'
 def retrieveSubmitElement(driver, element_class):
     return driver.find_elements_by_class_name(element_class)
 
@@ -64,7 +66,8 @@ def answerCheckBox(driver, mscfa, element_id):
 
 # Grab our button and submit our form
 def submit(driver, element_class):
-    driver.find_element_by_xpath(element_class).click()
+    driver.find_element(By.CLASS_NAME, element_class).click()
+    # driver.find_element_by_xpath(element_class).click()
     return driver
 
 
@@ -97,17 +100,15 @@ driver = webdriver.Chrome(service=s)
 driver.get(url)
 
 
-submit_xpath = '/html/body/div/div[2]/form/div[7]/input'
+# submit_xpath = '/html/body/div/div[2]/form/div[7]/input'
 # Switched to find_element() instead
-test = driver.find_element(By.xpath(submit_xpath))
+# test = driver.find_element(By.CLASS_NAME, 'frm-btn')
+# print(test)
 
-print(test)
-
-
-# driver.maximize_window()
-# driver = answerTextQuestions(driver, mscfa)
+driver.maximize_window()
+driver = answerTextQuestions(driver, mscfa)
 # driver = answerCheckBox(driver, mscfa, 'id_cc_myself')
-# driver = submit(driver, 'frm_btn')
+driver = submit(driver, 'frm-btn')
 
 
 # def answerNameAge(driver, df, element_class, user_id):
