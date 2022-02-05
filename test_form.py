@@ -25,7 +25,7 @@ from selenium.webdriver.common.by import By
 ##############################################################################
 
 
-# Find elements by id's as well as classes
+# Find HTML elements by id's as well as classes, return them as a list
 def retrieveContactFormTextElements(driver):
     name_element = driver.find_element(By.ID, mySiteData['nameID'])
     email_element = driver.find_element(By.ID, mySiteData['senderID'])
@@ -34,8 +34,9 @@ def retrieveContactFormTextElements(driver):
     return [name_element, email_element, subject_element, message_element]
 
 
-# Grab our questions and answers and zip together
-def answerTextQuestions(driver, mscfa):
+# Grab our questions and answers and zip them together. Fill out our
+# form with the answers and return our updated driver
+def answerContactFormTextQuestions(driver, mscfa):
     name = mscfa['name']
     email = mscfa['email']
     subject = mscfa['subject']
@@ -47,6 +48,7 @@ def answerTextQuestions(driver, mscfa):
     return driver
 
 
+# Retrieve our checkbox element and check it
 def answerCheckBox(driver, element_id):
     driver.find_element(By.ID, element_id).click()
     return driver
@@ -94,15 +96,16 @@ mscfa = {
 ##############################################################################
 
 
-url = "https://rexhmitchell.com/contact/"
+url = mySiteData['url']
 s = Service("./chromedriver")
 driver = webdriver.Chrome(service=s)
 driver.get(url)
 
 driver.maximize_window()
-driver = answerTextQuestions(driver, mscfa)
+driver = answerContactFormTextQuestions(driver, mscfa)
 driver = answerCheckBox(driver, mySiteData['checkboxID'])
 driver = submit(driver, mySiteData['submitID'])
+driver.quit()
 
 
 ##############################################################################
