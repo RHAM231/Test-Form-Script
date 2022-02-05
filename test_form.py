@@ -14,8 +14,8 @@ from selenium.webdriver.common.by import By
 ##############################################################################
 
 
-# Let's make a script to test submission of our contact form. We'll use
-# the code from the article below as a starting point.
+# Let's make a script to test submission of our live contact forms.
+# We'll use the code from the article below as a starting point.
 
 # https://towardsdatascience.com/automating-submission-forms-with-python-94459353b03e
 
@@ -27,7 +27,6 @@ from selenium.webdriver.common.by import By
 
 # Use driver.find_element_by_id() as well as class
 def retrieveTextElements(driver):
-    # Use "driver.find_element(By.ID, '')" instead
     name_element = driver.find_element(By.ID, 'id_name')
     email_element = driver.find_element(By.ID, 'id_sender')
     subject_element = driver.find_element(By.ID, 'id_subject')
@@ -38,11 +37,11 @@ def retrieveTextElements(driver):
 
 # 'id_cc_myself'
 def retrieveCheckboxElement(driver, elementID):
-    return driver.find_element_by_id(elementID)
+    return driver.find_element(By.ID, elementID)
 
 # 'frm-btn'
 def retrieveSubmitElement(driver, element_class):
-    return driver.find_elements_by_class_name(element_class)
+    return driver.find_element(By.CLASS_NAME, element_class)
 
 
 # Grab our questions and answers and zip together
