@@ -1,13 +1,7 @@
-# Python Base Imports
-# import time
-# import json
-# from datetime import datetime
-# import pathlib
-# import glob
-# import sys
-# sys.path.append(".")
+##############################################################################
+# IMPORTS
+##############################################################################
 
-# Installed Packages
 from selenium import webdriver
 # Import Service to resolve executable_path deprecation issue
 from selenium.webdriver.chrome.service import Service
@@ -17,6 +11,9 @@ from selenium.webdriver.chrome.service import Service
 # BEGIN SCRIPT
 ##############################################################################
 
+
+# Let's make a script to test submission of our contact form. We'll use
+# the code from the article below as a starting point.
 
 # https://towardsdatascience.com/automating-submission-forms-with-python-94459353b03e
 
@@ -98,7 +95,7 @@ driver = webdriver.Chrome(service=s)
 driver.get(url)
 driver.maximize_window()
 driver = answerTextQuestions(driver, mscfa)
-driver = answerCheckBox(driver, mscfa, 'id_cc_myself')
+# driver = answerCheckBox(driver, mscfa, 'id_cc_myself')
 driver = submit(driver, 'frm_btn')
 
 
