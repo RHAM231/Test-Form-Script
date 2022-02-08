@@ -76,7 +76,7 @@ mySiteData = {
     'subjectID': 'id_subject',
     'messageID': 'id_message',
     'checkboxID': 'id_cc_myself',
-    'submitID': 'frm-btn',
+    'submitCLASS': 'frm-btn',
     # My contact form automated answers
     'nameANSWER': 'Python Test Script',
     'emailANSWER': 'nogardjmj@gmail.com',
@@ -91,14 +91,14 @@ mySiteData = {
 
 HMSiteData = {
     # Hope Medical's contact form url
-    'url': '',
+    'url': 'https://www.hopemedicalwa.com/contact/',
     # Hope Medical's contact form html id's and classes
     'nameID': 'id_name',
     'senderID': 'id_sender',
     'subjectID': 'id_subject',
     'messageID': 'id_message',
     'checkboxID': 'id_cc_myself',
-    'submitID': 'frm-btn',
+    'submitCLASS': 'frm-btn',
     # Hope Medical's contact form automated answers
     'nameANSWER': 'Rex Mitchell',
     'emailANSWER': 'nogardjmj@gmail.com',
@@ -130,7 +130,7 @@ def test_live_contact_form(siteData):
     driver.maximize_window()
     driver = answerContactFormTextQuestions(driver, siteData)
     driver = answerCheckBox(driver, mySiteData['checkboxID'])
-    driver = submit(driver, mySiteData['submitID'])
+    driver = submit(driver, mySiteData['submitCLASS'])
 
     # Terminate our driver so our script will stop
     driver.quit()
