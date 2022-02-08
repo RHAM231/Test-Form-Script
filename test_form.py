@@ -85,7 +85,6 @@ mySiteData = {
         'This is an automated test performed '
         'by test_form.py using Selenium.'
         ),
-    'cc_myselfANSWER': 'Uknwown'
 }
 
 
@@ -107,7 +106,6 @@ HMSiteData = {
         'This is an automated test to verify the contact form is working'
         ' properly.'
         ),
-    'cc_myselfANSWER': 'Uknwown'
 }
 
 
