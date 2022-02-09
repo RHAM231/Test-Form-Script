@@ -121,16 +121,16 @@ class TestDriver(object):
         self.driver = webdriver.Chrome(service=s)
 
     def getURL(self, siteData):
-        # Get our url from our given data, initialize Selenium's driver and
-        # pass our url to driver
+        # Get our url from our given data, initialize Selenium's driver
+        # and pass our url to driver
         url = siteData['url']
         self.driver.get(url)
 
-    # Run our test contact form functions above to test if a contact form
-    # on a given live site is working properly
+    # Run our test contact form functions above to test if a contact
+    # form on a given live site is working properly
     def test_live_contact_form(self, siteData):
-        # Get our url from our given data, initialize Selenium's driver and
-        # pass our url to driver
+        # Get our url from our given data, initialize Selenium's driver
+        # and pass our url to driver
         # url = siteData['url']
         # s = Service("./chromedriver")
         # driver = webdriver.Chrome(service=s)

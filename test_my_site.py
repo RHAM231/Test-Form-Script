@@ -1,4 +1,6 @@
-from test_form import mySiteData, test_live_contact_form
+from test_form import mySiteData, TestDriver
 
 
-test_live_contact_form(mySiteData)
+testDriver = TestDriver()
+testDriver.getURL(mySiteData)
+testDriver.test_live_contact_form(mySiteData)
