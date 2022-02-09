@@ -115,11 +115,16 @@ HMSiteData = {
 
 
 
+# Let's create a driver class to better organize our different
+# functions. Over time, we'll add functions to test more than just
+# contact forms.
 class TestDriver(object):
+    # Instantiate our driver from Selenium
     def __init__(self):
         s = Service("./chromedriver")
         self.driver = webdriver.Chrome(service=s)
 
+    # Feed it an endpoint
     def getURL(self, siteData):
         # Get our url from our given data, initialize Selenium's driver
         # and pass our url to driver
@@ -129,13 +134,6 @@ class TestDriver(object):
     # Run our test contact form functions above to test if a contact
     # form on a given live site is working properly
     def test_live_contact_form(self, siteData):
-        # Get our url from our given data, initialize Selenium's driver
-        # and pass our url to driver
-        # url = siteData['url']
-        # s = Service("./chromedriver")
-        # driver = webdriver.Chrome(service=s)
-        # driver.get(url)
-
         # Open the form in Chrome, fill it out, and submit it
         self.driver.maximize_window()
         self.driver = answerContactFormTextQuestions(self.driver, siteData)
