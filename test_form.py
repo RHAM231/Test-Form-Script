@@ -114,24 +114,30 @@ HMSiteData = {
 ##############################################################################
 
 
-# Run our test contact form functions above to test if a contact form
-# on a given live site is working properly
-def test_live_contact_form(siteData):
-    # Get our url from our given data, initialize Selenium's driver and
-    # pass our url to driver
-    url = siteData['url']
-    s = Service("./chromedriver")
-    driver = webdriver.Chrome(service=s)
-    driver.get(url)
 
-    # Open the form in Chrome, fill it out, and submit it
-    driver.maximize_window()
-    driver = answerContactFormTextQuestions(driver, siteData)
-    driver = answerCheckBox(driver, mySiteData['checkboxID'])
-    driver = submit(driver, mySiteData['submitCLASS'])
+class TestDriver(object):
+    def __init__(self):
+        self.s = Service
 
-    # Terminate our driver so our script will stop
-    driver.quit()
+
+    # Run our test contact form functions above to test if a contact form
+    # on a given live site is working properly
+    def test_live_contact_form(siteData):
+        # Get our url from our given data, initialize Selenium's driver and
+        # pass our url to driver
+        url = siteData['url']
+        s = Service("./chromedriver")
+        driver = webdriver.Chrome(service=s)
+        driver.get(url)
+
+        # Open the form in Chrome, fill it out, and submit it
+        driver.maximize_window()
+        driver = answerContactFormTextQuestions(driver, siteData)
+        driver = answerCheckBox(driver, mySiteData['checkboxID'])
+        driver = submit(driver, mySiteData['submitCLASS'])
+
+        # Terminate our driver so our script will stop
+        driver.quit()
 
 
 ##############################################################################
