@@ -1,4 +1,7 @@
-from test_form import HMSiteData, test_live_contact_form
+from test_form import HMSiteData, TestDriver
 
 
-test_live_contact_form(HMSiteData)
+testDriver = TestDriver()
+testDriver.getURL(HMSiteData)
+testDriver.test_live_contact_form(HMSiteData)
+

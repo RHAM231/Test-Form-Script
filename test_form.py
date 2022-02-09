@@ -3,6 +3,8 @@
 ##############################################################################
 
 from selenium import webdriver
+# 
+from selenium.webdriver import ActionChains
 # Import Service to resolve executable_path deprecation issue
 from selenium.webdriver.chrome.service import Service
 # Import "By" to resolve find_element() deprecation issues
@@ -50,7 +52,15 @@ def answerContactFormTextQuestions(driver, siteData):
 
 # Retrieve our checkbox element and check it
 def answerCheckBox(driver, element_id):
-    driver.find_element(By.ID, element_id).click()
+    checkBox = driver.find_element(By.ID, element_id)
+
+
+    action = ActionChains(driver)
+    action.move_to_element_with_offset(checkBox, 1, 1)
+    action.click()
+    action.perform()
+
+
     return driver
 
 
@@ -114,7 +124,6 @@ HMSiteData = {
 ##############################################################################
 
 
-
 # Let's create a driver class to better organize our different
 # functions. Over time, we'll add functions to test more than just
 # contact forms.
@@ -126,22 +135,22 @@ class TestDriver(object):
 
     # Feed it an endpoint
     def getURL(self, siteData):
-        # Get our url from our given data, initialize Selenium's driver
-        # and pass our url to driver
+        # Get our url from our given data, initialize Selenium's
+        # driver, and pass our url to driver
         url = siteData['url']
         self.driver.get(url)
 
     # Run our test contact form functions above to test if a contact
-    # form on a given live site is working properly
+    # form on a given, live site is working properly
     def test_live_contact_form(self, siteData):
         # Open the form in Chrome, fill it out, and submit it
         self.driver.maximize_window()
         self.driver = answerContactFormTextQuestions(self.driver, siteData)
         self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
-        self.driver = submit(self.driver, mySiteData['submitCLASS'])
+        # self.driver = submit(self.driver, mySiteData['submitCLASS'])
 
         # Terminate our driver so our script will stop
-        self.driver.quit()
+        # self.driver.quit()
 
 
 ##############################################################################
