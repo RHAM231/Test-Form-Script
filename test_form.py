@@ -151,6 +151,19 @@ class TestDriver(object):
 
         # Terminate our driver so our script will stop
         # self.driver.quit()
+    
+    # Run our test registration form functions above to test if a
+    # registration form on a given, live site is working properly
+    def test_live_registration_form(self, siteData):
+        # Open the form in Chrome, fill it out, and submit it
+        self.driver.maximize_window()
+        # self.driver = \
+        #     answerRegistrationFormTextQuestions(self.driver, siteData)
+        self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
+        # self.driver = submit(self.driver, mySiteData['submitCLASS'])
+
+        # Terminate our driver so our script will stop
+        # self.driver.quit()
 
 
 ##############################################################################
