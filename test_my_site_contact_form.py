@@ -1,3 +1,11 @@
+##############################################################################
+# IMPORTS
+##############################################################################
+
+
+# Grab our test data and our test functionality from our main test
+# script file.
+
 from test_form import mySiteData, TestDriver
 
 
