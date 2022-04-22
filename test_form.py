@@ -130,6 +130,7 @@ HMSiteData = {
 class TestDriver(object):
     # Instantiate our driver from Selenium
     def __init__(self):
+
         s = Service("./chromedriver")
         self.driver = webdriver.Chrome(service=s)
 
@@ -147,10 +148,10 @@ class TestDriver(object):
         self.driver.maximize_window()
         self.driver = answerContactFormTextQuestions(self.driver, siteData)
         self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
-        # self.driver = submit(self.driver, mySiteData['submitCLASS'])
+        self.driver = submit(self.driver, mySiteData['submitCLASS'])
 
         # Terminate our driver so our script will stop
-        # self.driver.quit()
+        self.driver.quit()
     
     # Run our test registration form functions above to test if a
     # registration form on a given, live site is working properly
