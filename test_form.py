@@ -3,12 +3,14 @@
 ##############################################################################
 
 from selenium import webdriver
-# 
 from selenium.webdriver import ActionChains
 # Import Service to resolve executable_path deprecation issue
 from selenium.webdriver.chrome.service import Service
 # Import "By" to resolve find_element() deprecation issues
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import WebDriverException
+
+from update_driver import UpdateChromeDriver
 
 
 ##############################################################################
@@ -53,14 +55,10 @@ def answerContactFormTextQuestions(driver, siteData):
 # Retrieve our checkbox element and check it
 def answerCheckBox(driver, element_id):
     checkBox = driver.find_element(By.ID, element_id)
-
-
     action = ActionChains(driver)
     action.move_to_element_with_offset(checkBox, 1, 1)
     action.click()
     action.perform()
-
-
     return driver
 
 
@@ -130,8 +128,15 @@ HMSiteData = {
 class TestDriver(object):
     # Instantiate our driver from Selenium
     def __init__(self):
+        print('GOT HERE')
+        try:
+            print('GOT HERE')
+            s = Service("./chromedriver")
 
-        s = Service("./chromedriver")
+        except FileNotFoundError and WebDriverException:
+            print('\n', 'EXCEPTION', '\n')
+            UpdateChromeDriver.get_latest_version()
+            s = Service("./chromedriver")
         self.driver = webdriver.Chrome(service=s)
 
     # Feed it an endpoint
@@ -143,15 +148,15 @@ class TestDriver(object):
 
     # Run our test contact form functions above to test if a contact
     # form on a given, live site is working properly
-    def test_live_contact_form(self, siteData):
-        # Open the form in Chrome, fill it out, and submit it
-        self.driver.maximize_window()
-        self.driver = answerContactFormTextQuestions(self.driver, siteData)
-        self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
-        self.driver = submit(self.driver, mySiteData['submitCLASS'])
+    # def test_live_contact_form(self, siteData):
+    #     # Open the form in Chrome, fill it out, and submit it
+    #     self.driver.maximize_window()
+    #     self.driver = answerContactFormTextQuestions(self.driver, siteData)
+    #     self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
+    #     self.driver = submit(self.driver, mySiteData['submitCLASS'])
 
-        # Terminate our driver so our script will stop
-        self.driver.quit()
+    #     # Terminate our driver so our script will stop
+    #     self.driver.quit()
     
     # Run our test registration form functions above to test if a
     # registration form on a given, live site is working properly

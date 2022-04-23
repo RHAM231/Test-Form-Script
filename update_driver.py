@@ -44,7 +44,6 @@ def get_pc_chrome_version():
         path,
         shell=True
     )
-    print(output.decode('utf-8').strip())
     return output.decode('utf-8').strip()
 
 
