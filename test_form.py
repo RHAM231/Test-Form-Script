@@ -147,26 +147,14 @@ class TestDriver(object):
         # driver, and pass our url to driver
         url = siteData['url']
         self.driver.get(url)
-    
-    def test_links(self):
-        # nav_links = self.driver.find_elements(By.CLASS_NAME, 'nav-link')
-        # drop_links = self.driver.find_elements(By.CLASS_NAME, 'dropdown-item')
-        # brand_link = self.driver.find_elements(By.CLASS_NAME, 'navbar-brand')
-        # brand_link = self.driver.find_element(By.CLASS_NAME, 'navbar-brand')
-        
-        classes = (
-            "//*["
-            "@class='nav-link' or "
-            "@class='navbar-brand' or "
-            "@class='dropdown-item'"
-            "]"
-            )
 
+    def test_links(self, classes):
         links = self.driver.find_elements_by_xpath(classes)
 
         for link in links:
             r = requests.head(link.get_attribute('href'))
             print(link.get_attribute('href'), r.status_code)
+
 
     # Run our test contact form functions above to test if a contact
     # form on a given, live site is working properly
