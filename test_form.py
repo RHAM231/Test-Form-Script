@@ -132,9 +132,14 @@ class TestDriver(object):
         # UpdateChromeDriver.get_latest_version()
         # print('\n\n', 'Chromedriver successfully updated. Starting tests ...', '\n')
 
+        # Add options setting to declutter log from chromedriver bug.
+        # See https://stackoverflow.com/questions/64927909/failed-to-read-descriptor-from-node-connection-a-device-attached-to-the-system
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
         # Set up driver
         s = Service("./chromedriver")
-        self.driver = webdriver.Chrome(service=s)
+        self.driver = webdriver.Chrome(service=s, options=options)
 
     # Feed it an endpoint
     def getURL(self, siteData):
@@ -144,13 +149,22 @@ class TestDriver(object):
         self.driver.get(url)
     
     def test_links(self):
-        # links = self.driver.find_elements(By.CLASS_NAME, 'nav-link')
-        # links2 = self.driver.find_elements(By.CLASS_NAME, 'dropdown-item')
-        links2 = self.driver.find_elements_by_xpath(
-            "//*[@class='nav-link' or @class='dropdown-item']")
-        # links = links + links2
+        # nav_links = self.driver.find_elements(By.CLASS_NAME, 'nav-link')
+        # drop_links = self.driver.find_elements(By.CLASS_NAME, 'dropdown-item')
+        # brand_link = self.driver.find_elements(By.CLASS_NAME, 'navbar-brand')
+        # brand_link = self.driver.find_element(By.CLASS_NAME, 'navbar-brand')
+        
+        classes = (
+            "//*["
+            "@class='nav-link' or "
+            "@class='navbar-brand' or "
+            "@class='dropdown-item'"
+            "]"
+            )
 
-        for link in links2:
+        links = self.driver.find_elements_by_xpath(classes)
+
+        for link in links:
             r = requests.head(link.get_attribute('href'))
             print(link.get_attribute('href'), r.status_code)
 
