@@ -2,14 +2,13 @@
 # IMPORTS
 ##############################################################################
 
+import requests
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 # Import Service to resolve executable_path deprecation issue
 from selenium.webdriver.chrome.service import Service
 # Import "By" to resolve find_element() deprecation issues
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import WebDriverException, SessionNotCreatedException
-
 from update_driver import UpdateChromeDriver
 
 
@@ -129,9 +128,9 @@ class TestDriver(object):
     # Instantiate our driver from Selenium
     def __init__(self):
         # Get the latest version.
-        print('\n', 'Retrieving the latest version of chromedriver ...', '\n')
-        UpdateChromeDriver.get_latest_version()
-        print('\n\n', 'Chromedriver successfully updated. Starting tests ...', '\n')
+        # print('\n', 'Retrieving the latest version of chromedriver ...', '\n')
+        # UpdateChromeDriver.get_latest_version()
+        # print('\n\n', 'Chromedriver successfully updated. Starting tests ...', '\n')
 
         # Set up driver
         s = Service("./chromedriver")
@@ -143,6 +142,17 @@ class TestDriver(object):
         # driver, and pass our url to driver
         url = siteData['url']
         self.driver.get(url)
+    
+    def test_links(self):
+        # links = self.driver.find_elements(By.CLASS_NAME, 'nav-link')
+        # links2 = self.driver.find_elements(By.CLASS_NAME, 'dropdown-item')
+        links2 = self.driver.find_elements_by_xpath(
+            "//*[@class='nav-link' or @class='dropdown-item']")
+        # links = links + links2
+
+        for link in links2:
+            r = requests.head(link.get_attribute('href'))
+            print(link.get_attribute('href'), r.status_code)
 
     # Run our test contact form functions above to test if a contact
     # form on a given, live site is working properly
