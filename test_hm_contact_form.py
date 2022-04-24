@@ -5,8 +5,9 @@
 
 # Grab our test data and our test functionality from our main test
 # script file.
-from test_form import HMSiteData, TestDriver
+from test_form import TestDriver, HMSiteData
 
+# THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
 
 ##############################################################################
 # BACKGROUND
@@ -20,10 +21,30 @@ from test_form import HMSiteData, TestDriver
 # different pieces of our three sites seperately. We don't necessarily
 # want to test all three sites at the same frequency.
 
+# HMSiteData = {
+#     # Hope Medical's contact form url
+#     'url': 'https://www.hopemedicalwa.com/contact/',
+#     # Hope Medical's contact form html id's and classes
+#     'nameID': 'id_name',
+#     'senderID': 'id_sender',
+#     'subjectID': 'id_subject',
+#     'messageID': 'id_message',
+#     'checkboxID': 'id_cc_myself',
+#     'submitCLASS': 'frm-btn',
+#     # Hope Medical's contact form automated answers
+#     'nameANSWER': 'Rex Mitchell',
+#     'emailANSWER': 'nogardjmj@gmail.com',
+#     'subjectANSWER': 'Automated Python Test',
+#     'messageANSWER': (
+#         'This is an automated test to verify the contact form is working'
+#         ' properly.'
+#         ),
+# }
 
 ##############################################################################
 # DRIVING CODE
 ##############################################################################
+
 
 
 # Intialize our Selenium driver object

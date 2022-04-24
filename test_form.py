@@ -11,6 +11,12 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from update_driver import UpdateChromeDriver
 
+# from test_my_site_contact_form import mySiteData
+# from test_hm_contact_form import HMSiteData
+from selenium.common.exceptions import WebDriverException
+
+
+# THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
 
 ##############################################################################
 # BEGIN SCRIPT
@@ -66,56 +72,6 @@ def submit(driver, element_class):
     driver.find_element(By.CLASS_NAME, element_class).click()
     return driver
 
-
-##############################################################################
-# TEST DATA
-##############################################################################
-
-
-# The url for the contact form and the form element id's and classes
-# for my site
-mySiteData = {
-    # My contact form url
-    'url': 'https://rexhmitchell.com/contact/',
-    # My contact form html id's and classes
-    'nameID': 'id_name',
-    'senderID': 'id_sender',
-    'subjectID': 'id_subject',
-    'messageID': 'id_message',
-    'checkboxID': 'id_cc_myself',
-    'submitCLASS': 'frm-btn',
-    # My contact form automated answers
-    'nameANSWER': 'Python Test Script',
-    'emailANSWER': 'nogardjmj@gmail.com',
-    'subjectANSWER': 'Selenium Test',
-    'messageANSWER': (
-        'This is an automated test performed '
-        'by test_form.py using Selenium.'
-        ),
-}
-
-
-HMSiteData = {
-    # Hope Medical's contact form url
-    'url': 'https://www.hopemedicalwa.com/contact/',
-    # Hope Medical's contact form html id's and classes
-    'nameID': 'id_name',
-    'senderID': 'id_sender',
-    'subjectID': 'id_subject',
-    'messageID': 'id_message',
-    'checkboxID': 'id_cc_myself',
-    'submitCLASS': 'frm-btn',
-    # Hope Medical's contact form automated answers
-    'nameANSWER': 'Rex Mitchell',
-    'emailANSWER': 'nogardjmj@gmail.com',
-    'subjectANSWER': 'Automated Python Test',
-    'messageANSWER': (
-        'This is an automated test to verify the contact form is working'
-        ' properly.'
-        ),
-}
-
-
 ##############################################################################
 # DRIVING CODE
 ##############################################################################
@@ -148,13 +104,25 @@ class TestDriver(object):
         url = siteData['url']
         self.driver.get(url)
 
+    # Check all the links which can be found using the provided HTML
+    # classes.
     def test_links(self, classes):
+        # Find the links given the classes.
         links = self.driver.find_elements_by_xpath(classes)
 
+        # Check the status codes of the links.
         for link in links:
             r = requests.head(link.get_attribute('href'))
             print(link.get_attribute('href'), r.status_code)
 
+    def test_buttons_clickable(self):
+        elements = self.driver.find_elements(By.CLASS_NAME, 'link-btn-light')
+        for element in elements:
+            try:
+                element.click()
+                print('Success!')
+            except WebDriverException:
+                print("Element is not clickable")
 
     # Run our test contact form functions above to test if a contact
     # form on a given, live site is working properly
@@ -185,3 +153,47 @@ class TestDriver(object):
 ##############################################################################
 # END
 ##############################################################################
+
+
+
+HMSiteData = {
+    # Hope Medical's contact form url
+    'url': 'https://www.hopemedicalwa.com/contact/',
+    # Hope Medical's contact form html id's and classes
+    'nameID': 'id_name',
+    'senderID': 'id_sender',
+    'subjectID': 'id_subject',
+    'messageID': 'id_message',
+    'checkboxID': 'id_cc_myself',
+    'submitCLASS': 'frm-btn',
+    # Hope Medical's contact form automated answers
+    'nameANSWER': 'Rex Mitchell',
+    'emailANSWER': 'nogardjmj@gmail.com',
+    'subjectANSWER': 'Automated Python Test',
+    'messageANSWER': (
+        'This is an automated test to verify the contact form is working'
+        ' properly.'
+        ),
+}
+
+# The url for the contact form and the form element id's and classes
+# for my site
+mySiteData = {
+    # My contact form url
+    'url': 'https://rexhmitchell.com/contact/',
+    # My contact form html id's and classes
+    'nameID': 'id_name',
+    'senderID': 'id_sender',
+    'subjectID': 'id_subject',
+    'messageID': 'id_message',
+    'checkboxID': 'id_cc_myself',
+    'submitCLASS': 'frm-btn',
+    # My contact form automated answers
+    'nameANSWER': 'Python Test Script',
+    'emailANSWER': 'nogardjmj@gmail.com',
+    'subjectANSWER': 'Selenium Test',
+    'messageANSWER': (
+        'This is an automated test performed '
+        'by test_form.py using Selenium.'
+        ),
+}
