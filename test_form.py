@@ -3,6 +3,10 @@
 ##############################################################################
 
 import requests
+import time
+from tabulate import tabulate
+
+
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 # Import Service to resolve executable_path deprecation issue
@@ -14,6 +18,11 @@ from update_driver import UpdateChromeDriver
 # from test_my_site_contact_form import mySiteData
 # from test_hm_contact_form import HMSiteData
 from selenium.common.exceptions import WebDriverException
+
+
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
@@ -32,6 +41,18 @@ from selenium.common.exceptions import WebDriverException
 ##############################################################################
 # CONTACT FORM TEST FUNCTIONS
 ##############################################################################
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\u001b[32m'
+    WARNING = '\033[93m'
+    FAIL = '\u001b[31m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 
 
 # Find HTML elements by id's as well as classes, return them as a list
@@ -115,14 +136,54 @@ class TestDriver(object):
             r = requests.head(link.get_attribute('href'))
             print(link.get_attribute('href'), r.status_code)
 
-    def test_buttons_clickable(self):
-        elements = self.driver.find_elements(By.CLASS_NAME, 'link-btn-light')
+    def test_buttons_clickable(self, classes):
+        # elements = self.driver.find_elements_by_xpath(classes)
+        html_ids = ['icon-label1', 'icon-label2']
+
+        labels = []
+        elements = []
+        for html_id in html_ids:
+            try:
+                element = WebDriverWait(
+                    self.driver, 5).until(
+                        EC.element_to_be_clickable(
+                            (By.ID, html_id)))
+                elements.append(element)
+            except TimeoutException:
+                print('Timeout EXCEPTION OCCURRED')
+                element = self.driver.find_element(By.ID, html_id)
+                elements.append(element)
+
+            elem_class = element.get_attribute('class')
+            elem_href = element.get_attribute('href')
+            labels.append((elem_class, elem_href))
+
+        # labels = []
+        # for element in elements:
+        #     elem_class = element.get_attribute('class')
+        #     elem_href = element.get_attribute('href')
+        #     labels.append((elem_class, elem_href))
+        results = []
         for element in elements:
             try:
-                element.click()
-                print('Success!')
+                element.send_keys("\n")
+                # element.click()
+                results.append('Successful')
             except WebDriverException:
-                print("Element is not clickable")
+                results.append('FAIL: element is not clickable')
+        
+        zipped = zip(labels, results)
+        final = []
+        for item in zipped:
+            html_class = item[0][0]
+            url = item[0][1]
+            if 'FAIL' in item[1]:
+                result = f'{bcolors.FAIL}{item[1]}{bcolors.ENDC}'
+            else:
+                result = f'{bcolors.OKGREEN}{item[1]}{bcolors.ENDC}'
+            final.append([html_class, url, result])
+
+        print(tabulate(final, headers=['HTML Class', 'URL', 'Result']), '\n')
 
     # Run our test contact form functions above to test if a contact
     # form on a given, live site is working properly
