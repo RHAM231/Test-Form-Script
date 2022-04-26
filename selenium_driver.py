@@ -127,12 +127,17 @@ class TestDriver(object):
 
     # Check all the links which can be found using the provided HTML
     # classes.
-    def test_links(self, classes):
+    def test_links(self, page, classes):
         # Find the links given the classes.
         links = self.driver.find_elements_by_xpath(classes)
 
+        # Set up our page header rows
+        columns = ('class', 'id', 'href', 'msg')
+        pg_hdr = {col:f'{page.upper()} PAGE' for col in columns}
+        sep_row = {col:'------------' for col in columns}
+        results = [sep_row, pg_hdr, sep_row]
+
         # Check the status codes of the links.
-        results = []
         for link in links:
             data = {}
             r = requests.head(link.get_attribute('href'))
@@ -147,15 +152,22 @@ class TestDriver(object):
             
             self.extract_attributes(results, data, link)
         
-        self.tabulate_test_results(results)
+        return results
 
     # Given a list of HTML element ids, check if the buttons are
     # clickable. Raise an exception if not. Tabulate the results to
     # terminal.
-    def test_buttons_clickable(self, ids):
+    def test_buttons_clickable(self, page, ids):
         # Initialize our results. This will be a list of dictionaries,
-        # each dictionary corresponding to a button.
-        results = []
+        # each dictionary corresponding to a button. Add the header row
+        # for the page.
+
+        # Set up our page header rows
+        columns = ('class', 'id', 'href', 'msg')
+        pg_hdr = {col:f'{page.upper()} PAGE' for col in columns}
+        sep_row = {col:'------------' for col in columns}
+        results = [sep_row, pg_hdr, sep_row]
+
         # For every id in the list ...
         for html_id in ids:
             # Initialize an empty dictionary
@@ -167,7 +179,7 @@ class TestDriver(object):
                 element = WebDriverWait(self.driver, 5).until\
                     (EC.element_to_be_clickable((By.ID, html_id)))
                 # Set our success message.
-                data['msg'] = 'Successful'
+                data['msg'] = 'Success: element is clickable'
 
             # If we were unable to click the button after the delay,
             # raise an exception.
@@ -179,8 +191,7 @@ class TestDriver(object):
 
             self.extract_attributes(results, data, element)
 
-        # Tabulate our results and print to terminal.
-        self.tabulate_test_results(results)
+        return results
 
     def extract_attributes(self, results, data, element):
         # Extract pertinent label info to output to our table.
@@ -200,12 +211,17 @@ class TestDriver(object):
             # Extract our data.
             html_class = data['class']
             html_id = data['id']
-            url = data['href']
+            if len(data['href']) > 60:
+                url = data['href'][0:45] + ' ...'
+            else:
+                url = data['href']
             msg = data['msg']
             # Change the color of the result message to be green for
             # success and red for failure.
             if 'FAIL' in msg:
                 result = f'{bcolors.FAIL}{msg}{bcolors.ENDC}'
+            elif 'PAGE' in msg or '------------' == msg:
+                result = msg
             else:
                 result = f'{bcolors.OKGREEN}{msg}{bcolors.ENDC}'
             # Add our data to rows.

@@ -30,8 +30,11 @@ def set_links(page):
     return classes[page]
 
 
-def check_links():
-    testDriver = TestDriver()
+def check_links(driver=None):
+    if __name__ == '__main__':
+        testDriver = TestDriver()
+    else:
+        testDriver = driver
 
     urls = {
         'home': 'https://rexhmitchell.com/', 
@@ -41,11 +44,17 @@ def check_links():
         'about': 'https://rexhmitchell.com/about_me/'
         }
 
+    tabulation = []
     for page, url in urls.items():
         testDriver.getURL({'url': url})
         classes = set_links(page)
-        print('########### ', page.upper(), 'PAGE ###########', '\n')
-        testDriver.test_links(classes)
-    testDriver.driver.quit()
+        results = testDriver.test_links(page, classes)
+        tabulation = tabulation + results
+
+    if __name__ == '__main__':
+        testDriver.tabulate_test_results(tabulation)
+        testDriver.driver.quit()
+    else:
+        return (tabulation, testDriver)
 
 check_links()

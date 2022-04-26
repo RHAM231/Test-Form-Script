@@ -1,5 +1,5 @@
 from selenium_driver import TestDriver
-import time
+
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
 def set_links(page):
@@ -15,22 +15,29 @@ def set_links(page):
     }
     return ids[page]
 
-def check_buttons():
-    testDriver = TestDriver()
-
+def check_buttons(driver=None):
+    if __name__ == '__main__':
+        testDriver = TestDriver()
+    else:
+        testDriver = driver
     urls = {
         'home': 'https://rexhmitchell.com/', 
         'portfolio': 'https://rexhmitchell.com/portfolio-project/',
         'about': 'https://rexhmitchell.com/about_me/'
         }
-
+    tabulation = []
     for page, url in urls.items():
         testDriver.getURL({'url': url})
         ids = set_links(page)
 
-        print('\n', '########### ', page.upper(), 'Page ###########', '\n')
-        testDriver.test_buttons_clickable(ids)
+        # print('########### ', page.upper(), 'PAGE ###########')
+        results = testDriver.test_buttons_clickable(page, ids)
+        tabulation = tabulation + results
 
-    testDriver.driver.quit()
-
+    if __name__ == '__main__':
+        testDriver.tabulate_test_results(tabulation)
+        testDriver.driver.quit()
+    else:
+        return (tabulation, testDriver)
+    
 check_buttons()
