@@ -13,6 +13,7 @@ def set_links(page):
                 "@class='dropdown-item' or "
                 "@class='link-btn-light' or "
                 "@class='box' or "
+                "@class='here-link' or "
                 "@class='github-logo2'"
                 "]"
                 ), 

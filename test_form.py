@@ -136,54 +136,54 @@ class TestDriver(object):
             r = requests.head(link.get_attribute('href'))
             print(link.get_attribute('href'), r.status_code)
 
-    def test_buttons_clickable(self, classes):
-        # elements = self.driver.find_elements_by_xpath(classes)
-        html_ids = ['icon-label1', 'icon-label2']
+    def test_buttons_clickable(self, ids):
+        # html_ids = [
+        #     'box-gh-id', 'box-ht5-id', 'box-git-id', 'box-aws-id', 
+        #     'box-c3-id', 'box-ubt-id', 'box-js-id', 'box-dr-id',
+        #     'box-bst-id', 'box-pyt-id', 'box-dj-id',
+        #     'HM-btn-id', 'IT-btn-id', 'MS-btn-id'
+        #     ]
 
-        labels = []
-        elements = []
-        for html_id in html_ids:
+        results = []
+        data = {}
+        for html_id in ids:
+            print(html_id)
             try:
                 element = WebDriverWait(
                     self.driver, 5).until(
                         EC.element_to_be_clickable(
                             (By.ID, html_id)))
-                elements.append(element)
+
+                data['msg'] = 'Successful'
             except TimeoutException:
-                print('Timeout EXCEPTION OCCURRED')
                 element = self.driver.find_element(By.ID, html_id)
-                elements.append(element)
+                data['msg'] = 'FAIL: element is not clickable'
 
-            elem_class = element.get_attribute('class')
-            elem_href = element.get_attribute('href')
-            labels.append((elem_class, elem_href))
+            data['class'] = element.get_attribute('class')
+            data['href'] = element.get_attribute('href')
+            data['id'] = element.get_attribute('id')
+            results.append(data)
 
-        # labels = []
-        # for element in elements:
-        #     elem_class = element.get_attribute('class')
-        #     elem_href = element.get_attribute('href')
-        #     labels.append((elem_class, elem_href))
-        results = []
-        for element in elements:
-            try:
-                element.send_keys("\n")
-                # element.click()
-                results.append('Successful')
-            except WebDriverException:
-                results.append('FAIL: element is not clickable')
-        
-        zipped = zip(labels, results)
-        final = []
-        for item in zipped:
-            html_class = item[0][0]
-            url = item[0][1]
-            if 'FAIL' in item[1]:
-                result = f'{bcolors.FAIL}{item[1]}{bcolors.ENDC}'
+        self.tabulate_test_results(results)
+
+    def tabulate_test_results(self, results):
+        rows = []
+        for data in results:
+            html_class = data['class']
+            html_id = data['id']
+            url = data['href']
+            msg = data['msg']
+            if 'FAIL' in msg:
+                result = f'{bcolors.FAIL}{msg}{bcolors.ENDC}'
             else:
-                result = f'{bcolors.OKGREEN}{item[1]}{bcolors.ENDC}'
-            final.append([html_class, url, result])
+                result = f'{bcolors.OKGREEN}{msg}{bcolors.ENDC}'
+            rows.append([html_class, html_id, url, result])
 
-        print(tabulate(final, headers=['HTML Class', 'URL', 'Result']), '\n')
+        print(tabulate(
+            rows, 
+            headers=['HTML Class', 'HTML Id', 'URL', 'Result']
+            ), '\n'
+            )
 
     # Run our test contact form functions above to test if a contact
     # form on a given, live site is working properly

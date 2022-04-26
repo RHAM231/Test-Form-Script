@@ -28,6 +28,13 @@ def set_links(page):
     }
     return classes[page]
 
+html_ids = [
+            'box-gh-id', 'box-ht5-id', 'box-git-id', 'box-aws-id', 
+            'box-c3-id', 'box-ubt-id', 'box-js-id', 'box-dr-id',
+            'box-bst-id', 'box-pyt-id', 'box-dj-id',
+            'HM-btn-id', 'IT-btn-id', 'MS-btn-id'
+            ]
+
 def check_buttons():
     testDriver = TestDriver()
 
@@ -48,7 +55,7 @@ def check_buttons():
             'Page #################', 
             '\n'
             )
-        testDriver.test_buttons_clickable(classes)
+        testDriver.test_buttons_clickable(html_ids)
 
     testDriver.driver.quit()
 
