@@ -132,9 +132,22 @@ class TestDriver(object):
         links = self.driver.find_elements_by_xpath(classes)
 
         # Check the status codes of the links.
+        results = []
         for link in links:
+            data = {}
             r = requests.head(link.get_attribute('href'))
-            print(link.get_attribute('href'), r.status_code)
+            status = r.status_code
+
+            if status == 200 or 301 or 302:
+                data['msg'] = f'OK: {status}'
+            elif status == 404:
+                data['msg'] = f'FAIL: {status}'
+            else:
+                data['msg'] = f'FAIL: {status}'
+            
+            self.extract_attributes(results, data, link)
+        
+        self.tabulate_test_results(results)
 
     # Given a list of HTML element ids, check if the buttons are
     # clickable. Raise an exception if not. Tabulate the results to
@@ -164,18 +177,21 @@ class TestDriver(object):
                 # Set our fail message.
                 data['msg'] = 'FAIL: element is not clickable'
 
-            # Extract pertinent label info to output to our table.
-            for attr in ('class', 'href', 'id'):
-                try:
-                    data[attr] = element.get_attribute(attr)
-                # If we can't get it, set it to None.
-                except WebDriverException:
-                    data[attr] = None
-            # Add the button dictionary to our results list.
-            results.append(data)
+            self.extract_attributes(results, data, element)
 
         # Tabulate our results and print to terminal.
         self.tabulate_test_results(results)
+
+    def extract_attributes(self, results, data, element):
+        # Extract pertinent label info to output to our table.
+        for attr in ('class', 'href', 'id'):
+            try:
+                data[attr] = element.get_attribute(attr)
+            # If we can't get it, set it to None.
+            except WebDriverException:
+                data[attr] = None
+        # Add the button dictionary to our results list.
+        results.append(data)
 
     def tabulate_test_results(self, results):
         # Create our data rows.
