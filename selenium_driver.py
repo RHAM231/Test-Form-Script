@@ -3,27 +3,20 @@
 ##############################################################################
 
 import requests
-import time
+
 from tabulate import tabulate
-
-
 from selenium import webdriver
 from selenium.webdriver import ActionChains
 # Import Service to resolve executable_path deprecation issue
 from selenium.webdriver.chrome.service import Service
 # Import "By" to resolve find_element() deprecation issues
 from selenium.webdriver.common.by import By
-from update_driver import UpdateChromeDriver
-
-# from test_my_site_contact_form import mySiteData
-# from test_hm_contact_form import HMSiteData
 from selenium.common.exceptions import WebDriverException
-
-
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
+from update_driver import UpdateChromeDriver
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
 
@@ -52,7 +45,6 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-
 
 
 # Find HTML elements by id's as well as classes, return them as a list
@@ -94,7 +86,7 @@ def submit(driver, element_class):
     return driver
 
 ##############################################################################
-# DRIVING CODE
+# SELENIUM DRIVER CLASS AND SETUP METHODS
 ##############################################################################
 
 
@@ -125,6 +117,37 @@ class TestDriver(object):
         url = siteData['url']
         self.driver.get(url)
 
+
+##############################################################################
+# TEST METHODS
+##############################################################################
+
+
+    # Run our test contact form functions above to test if a contact
+    # form on a given, live site is working properly
+    def test_live_contact_form(self, siteData):
+        # Open the form in Chrome, fill it out, and submit it
+        self.driver.maximize_window()
+        self.driver = answerContactFormTextQuestions(self.driver, siteData)
+        self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
+        self.driver = submit(self.driver, mySiteData['submitCLASS'])
+
+        # Terminate our driver so our script will stop
+        self.driver.quit()
+    
+    # Run our test registration form functions above to test if a
+    # registration form on a given, live site is working properly
+    def test_live_registration_form(self, siteData):
+        # Open the form in Chrome, fill it out, and submit it
+        self.driver.maximize_window()
+        # self.driver = \
+        #     answerRegistrationFormTextQuestions(self.driver, siteData)
+        self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
+        # self.driver = submit(self.driver, mySiteData['submitCLASS'])
+
+        # Terminate our driver so our script will stop
+        # self.driver.quit()
+
     # Check all the links which can be found using the provided HTML
     # classes.
     def test_links(self, page, classes):
@@ -132,10 +155,7 @@ class TestDriver(object):
         links = self.driver.find_elements_by_xpath(classes)
 
         # Set up our page header rows
-        columns = ('class', 'id', 'href', 'msg')
-        pg_hdr = {col:f'{page.upper()} PAGE' for col in columns}
-        sep_row = {col:'------------' for col in columns}
-        results = [sep_row, pg_hdr, sep_row]
+        results = self.set_page_header_rows(page)
 
         # Check the status codes of the links.
         for link in links:
@@ -163,10 +183,7 @@ class TestDriver(object):
         # for the page.
 
         # Set up our page header rows
-        columns = ('class', 'id', 'href', 'msg')
-        pg_hdr = {col:f'{page.upper()} PAGE' for col in columns}
-        sep_row = {col:'------------' for col in columns}
-        results = [sep_row, pg_hdr, sep_row]
+        results = self.set_page_header_rows(page)
 
         # For every id in the list ...
         for html_id in ids:
@@ -191,6 +208,19 @@ class TestDriver(object):
 
             self.extract_attributes(results, data, element)
 
+        return results
+
+
+##############################################################################
+# HELPER METHODS
+##############################################################################
+
+
+    def set_page_header_rows(self, page):
+        columns = ('class', 'id', 'href', 'msg')
+        pg_hdr = {col:f'{page.upper()} PAGE' for col in columns}
+        sep_row = {col:'------------' for col in columns}
+        results = [sep_row, pg_hdr, sep_row]
         return results
 
     def extract_attributes(self, results, data, element):
@@ -233,31 +263,6 @@ class TestDriver(object):
             headers=['HTML Class', 'HTML Id', 'URL', 'Result']
             ), '\n'
             )
-
-    # Run our test contact form functions above to test if a contact
-    # form on a given, live site is working properly
-    def test_live_contact_form(self, siteData):
-        # Open the form in Chrome, fill it out, and submit it
-        self.driver.maximize_window()
-        self.driver = answerContactFormTextQuestions(self.driver, siteData)
-        self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
-        self.driver = submit(self.driver, mySiteData['submitCLASS'])
-
-        # Terminate our driver so our script will stop
-        self.driver.quit()
-    
-    # Run our test registration form functions above to test if a
-    # registration form on a given, live site is working properly
-    def test_live_registration_form(self, siteData):
-        # Open the form in Chrome, fill it out, and submit it
-        self.driver.maximize_window()
-        # self.driver = \
-        #     answerRegistrationFormTextQuestions(self.driver, siteData)
-        self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
-        # self.driver = submit(self.driver, mySiteData['submitCLASS'])
-
-        # Terminate our driver so our script will stop
-        # self.driver.quit()
 
 
 ##############################################################################

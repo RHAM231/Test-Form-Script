@@ -30,7 +30,6 @@ def check_buttons(driver=None):
         testDriver.getURL({'url': url})
         ids = set_links(page)
 
-        # print('########### ', page.upper(), 'PAGE ###########')
         results = testDriver.test_buttons_clickable(page, ids)
         tabulation = tabulation + results
 
@@ -39,5 +38,6 @@ def check_buttons(driver=None):
         testDriver.driver.quit()
     else:
         return (tabulation, testDriver)
-    
-check_buttons()
+
+if __name__ == '__main__':
+    check_buttons()

@@ -57,4 +57,5 @@ def check_links(driver=None):
     else:
         return (tabulation, testDriver)
 
-check_links()
+if __name__ == '__main__':
+    check_links()
