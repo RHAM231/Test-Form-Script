@@ -136,49 +136,66 @@ class TestDriver(object):
             r = requests.head(link.get_attribute('href'))
             print(link.get_attribute('href'), r.status_code)
 
+    # Given a list of HTML element ids, check if the buttons are
+    # clickable. Raise an exception if not. Tabulate the results to
+    # terminal.
     def test_buttons_clickable(self, ids):
-        # html_ids = [
-        #     'box-gh-id', 'box-ht5-id', 'box-git-id', 'box-aws-id', 
-        #     'box-c3-id', 'box-ubt-id', 'box-js-id', 'box-dr-id',
-        #     'box-bst-id', 'box-pyt-id', 'box-dj-id',
-        #     'HM-btn-id', 'IT-btn-id', 'MS-btn-id'
-        #     ]
-
+        # Initialize our results. This will be a list of dictionaries,
+        # each dictionary corresponding to a button.
         results = []
-        data = {}
+        # For every id in the list ...
         for html_id in ids:
-            print(html_id)
+            # Initialize an empty dictionary
+            data = {}
+            # Try to retrieve the button and check if it can be
+            # clicked. Raise a timeout exception after five seconds.
             try:
-                element = WebDriverWait(
-                    self.driver, 5).until(
-                        EC.element_to_be_clickable(
-                            (By.ID, html_id)))
-
+                # Try to get the button using WebDriverWait.
+                element = WebDriverWait(self.driver, 5).until\
+                    (EC.element_to_be_clickable((By.ID, html_id)))
+                # Set our success message.
                 data['msg'] = 'Successful'
+
+            # If we were unable to click the button after the delay,
+            # raise an exception.
             except TimeoutException:
+                # Get the button normally instead.
                 element = self.driver.find_element(By.ID, html_id)
+                # Set our fail message.
                 data['msg'] = 'FAIL: element is not clickable'
 
-            data['class'] = element.get_attribute('class')
-            data['href'] = element.get_attribute('href')
-            data['id'] = element.get_attribute('id')
+            # Extract pertinent label info to output to our table.
+            for attr in ('class', 'href', 'id'):
+                try:
+                    data[attr] = element.get_attribute(attr)
+                # If we can't get it, set it to None.
+                except WebDriverException:
+                    data[attr] = None
+            # Add the button dictionary to our results list.
             results.append(data)
 
+        # Tabulate our results and print to terminal.
         self.tabulate_test_results(results)
 
     def tabulate_test_results(self, results):
+        # Create our data rows.
         rows = []
         for data in results:
+            # Extract our data.
             html_class = data['class']
             html_id = data['id']
             url = data['href']
             msg = data['msg']
+            # Change the color of the result message to be green for
+            # success and red for failure.
             if 'FAIL' in msg:
                 result = f'{bcolors.FAIL}{msg}{bcolors.ENDC}'
             else:
                 result = f'{bcolors.OKGREEN}{msg}{bcolors.ENDC}'
+            # Add our data to rows.
             rows.append([html_class, html_id, url, result])
 
+        # Tabulate our rows with its header to terminal.
         print(tabulate(
             rows, 
             headers=['HTML Class', 'HTML Id', 'URL', 'Result']
