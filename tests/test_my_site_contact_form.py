@@ -5,7 +5,7 @@
 import sys
 sys.path.append('')
 # Grab our test functionality from our main test script file.
-from selenium_driver import TestDriver
+from selenium_driver import TestDriver, DriverHelper
 from data.my_site_form_data import MySiteFormData
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     form_data = MySiteFormData()
     testDriver.getURL(form_data)
     testDriver, results = testDriver.test_live_contact_form(form_data)
-    testDriver.tabulate_test_results(results)
+    DriverHelper().tabulate_results(results)
     testDriver.driver.quit()
 
 

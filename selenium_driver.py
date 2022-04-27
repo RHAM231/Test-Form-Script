@@ -133,7 +133,7 @@ class TestDriver(object):
     # form on a given, live site is working properly
     def test_live_contact_form(self, siteData):
         # Open the form in Chrome, fill it out, and submit it
-        results = self.set_page_header_rows('Contact Form')
+        results = DriverHelper().set_page_header_rows('Contact Form')
         data = {}
         self.driver.maximize_window()
         try:
@@ -145,7 +145,7 @@ class TestDriver(object):
             btn = None
             data['msg'] = 'FAIL: email not sent'
 
-        self.extract_attributes(results, data, btn)
+        DriverHelper().extract_attributes(results, data, btn)
 
         return (self, results)
 
@@ -170,7 +170,7 @@ class TestDriver(object):
         links = self.driver.find_elements_by_xpath(classes)
 
         # Set up our page header rows
-        results = self.set_page_header_rows(page)
+        results = DriverHelper().set_page_header_rows(page)
 
         # Check the status codes of the links.
         for link in links:
@@ -185,7 +185,7 @@ class TestDriver(object):
             else:
                 data['msg'] = f'FAIL: {status}'
             
-            self.extract_attributes(results, data, link)
+            DriverHelper().extract_attributes(results, data, link)
         
         return results
 
@@ -198,7 +198,7 @@ class TestDriver(object):
         # for the page.
 
         # Set up our page header rows
-        results = self.set_page_header_rows(page)
+        results = DriverHelper().set_page_header_rows(page)
 
         # For every id in the list ...
         for html_id in ids:
@@ -221,7 +221,7 @@ class TestDriver(object):
                 # Set our fail message.
                 data['msg'] = 'FAIL: element is not clickable'
 
-            self.extract_attributes(results, data, element)
+            DriverHelper().extract_attributes(results, data, element)
 
         return results
 
@@ -230,7 +230,7 @@ class TestDriver(object):
 # HELPER METHODS
 ##############################################################################
 
-
+class DriverHelper(object):
     def set_page_header_rows(self, page):
         columns = ('class', 'id', 'href', 'msg')
         pg_hdr = {col:f'{page.upper()} PAGE' for col in columns}
@@ -249,7 +249,7 @@ class TestDriver(object):
         # Add the button dictionary to our results list.
         results.append(data)
 
-    def tabulate_test_results(self, results):
+    def tabulate_results(self, results):
         # Create our data rows.
         rows = []
         for data in results:
@@ -285,47 +285,3 @@ class TestDriver(object):
 ##############################################################################
 # END
 ##############################################################################
-
-
-
-HMSiteData = {
-    # Hope Medical's contact form url
-    'url': 'https://www.hopemedicalwa.com/contact/',
-    # Hope Medical's contact form html id's and classes
-    'nameID': 'id_name',
-    'senderID': 'id_sender',
-    'subjectID': 'id_subject',
-    'messageID': 'id_message',
-    'checkboxID': 'id_cc_myself',
-    'submitCLASS': 'frm-btn',
-    # Hope Medical's contact form automated answers
-    'nameANSWER': 'Rex Mitchell',
-    'emailANSWER': 'nogardjmj@gmail.com',
-    'subjectANSWER': 'Automated Python Test',
-    'messageANSWER': (
-        'This is an automated test to verify the contact form is working'
-        ' properly.'
-        ),
-}
-
-# # The url for the contact form and the form element id's and classes
-# # for my site
-# mySiteData = {
-#     # My contact form url
-#     'url': 'https://rexhmitchell.com/contact/',
-#     # My contact form html id's and classes
-#     'nameID': 'id_name',
-#     'senderID': 'id_sender',
-#     'subjectID': 'id_subject',
-#     'messageID': 'id_message',
-#     'checkboxID': 'id_cc_myself',
-#     'submitCLASS': 'frm-btn',
-#     # My contact form automated answers
-#     'nameANSWER': 'Python Test Script',
-#     'emailANSWER': 'nogardjmj@gmail.com',
-#     'subjectANSWER': 'Selenium Test',
-#     'messageANSWER': (
-#         'This is an automated test performed '
-#         'by test_form.py using Selenium.'
-#         ),
-# }

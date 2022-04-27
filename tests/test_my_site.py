@@ -1,7 +1,7 @@
 import sys
 sys.path.append('')
 
-from selenium_driver import TestDriver
+from selenium_driver import TestDriver, DriverHelper
 from test_site_elements import check_elements
 from data.my_site_button_data import MySiteButtonData
 from data.my_site_link_data import MySiteLinkData
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     form_tabulation, testDriver = submit_form(form_data, testDriver)
 
     tabulation = link_tabulation + btn_tabulation + form_tabulation
-    testDriver.tabulate_test_results(tabulation)
+    DriverHelper().tabulate_results(tabulation)
 
     testDriver.driver.quit()
 
