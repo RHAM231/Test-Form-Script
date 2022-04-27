@@ -1,4 +1,4 @@
-from test import test_site_elements
+from tests import test_site_elements
 from selenium_driver import TestDriver
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
