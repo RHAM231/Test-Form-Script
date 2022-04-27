@@ -82,8 +82,9 @@ def answerCheckBox(driver, element_id):
 
 # Grab our button and submit our form
 def submit(driver, element_class):
-    driver.find_element(By.CLASS_NAME, element_class).click()
-    return driver
+    submit_btn = driver.find_element(By.CLASS_NAME, element_class)
+    submit_btn.click()
+    return (driver, submit_btn)
 
 ##############################################################################
 # SELENIUM DRIVER CLASS AND SETUP METHODS
@@ -127,13 +128,22 @@ class TestDriver(object):
     # form on a given, live site is working properly
     def test_live_contact_form(self, siteData):
         # Open the form in Chrome, fill it out, and submit it
+        results = self.set_page_header_rows('Contact Form')
+        data = {}
         self.driver.maximize_window()
-        self.driver = answerContactFormTextQuestions(self.driver, siteData)
-        self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
-        self.driver = submit(self.driver, mySiteData['submitCLASS'])
+        try:
+            self.driver = answerContactFormTextQuestions(self.driver, siteData)
+            self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
+            self.driver, btn = submit(self.driver, mySiteData['submitCLASS'])
+            data['msg'] = 'Email Sent Successfully'
+        except WebDriverException:
+            btn = None
+            data['msg'] = 'FAIL: email not sent'
 
-        # Terminate our driver so our script will stop
-        self.driver.quit()
+        self.extract_attributes(results, data, btn)
+
+        return results
+
     
     # Run our test registration form functions above to test if a
     # registration form on a given, live site is working properly
@@ -241,7 +251,9 @@ class TestDriver(object):
             # Extract our data.
             html_class = data['class']
             html_id = data['id']
-            if len(data['href']) > 60:
+            if data['href'] == None:
+                url = data['href']
+            elif len(data['href']) > 50:
                 url = data['href'][0:45] + ' ...'
             else:
                 url = data['href']
