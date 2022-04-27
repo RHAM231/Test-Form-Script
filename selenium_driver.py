@@ -1,34 +1,41 @@
 ##############################################################################
-# IMPORTS
+# PTYHON IMPORTS
 ##############################################################################
 
-from typing import Dict
 import requests
-import inspect
+from typing import Dict
+
+##############################################################################
+# LIBRARY IMPORTS
+##############################################################################
 
 from tabulate import tabulate
 from selenium import webdriver
 from selenium.webdriver import ActionChains
-# Import Service to resolve executable_path deprecation issue
 from selenium.webdriver.chrome.service import Service
-# Import "By" to resolve find_element() deprecation issues
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import TimeoutException
+
+##############################################################################
+# PROJECT IMPORTS
+##############################################################################
 
 from update_driver import UpdateChromeDriver
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
 
 ##############################################################################
-# BEGIN SCRIPT
+# BACKGROUND
 ##############################################################################
 
 
-# Let's make a script to test submission of our live contact forms.
-# We'll use the code from the article below as a starting point.
+# Let's use Python Selenium to test live websites. We'll test form
+# submission, links, and that elements can be clicked. We'll tabulate
+# the results and print to terminal to quickly identify problems. Let's
+# use the code from the article below as a starting point.
 
 # https://towardsdatascience.com/automating-submission-forms-with-python-94459353b03e
 
@@ -36,17 +43,6 @@ from update_driver import UpdateChromeDriver
 ##############################################################################
 # CONTACT FORM TEST FUNCTIONS
 ##############################################################################
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\u001b[32m'
-    WARNING = '\033[93m'
-    FAIL = '\u001b[31m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
 
 
 # Find HTML elements by id's as well as classes, return them as a list
@@ -160,9 +156,6 @@ class TestDriver(object):
         self.driver = answerCheckBox(self.driver, siteData.checkboxID)
         # self.driver = submit(self.driver, mySiteData['submitCLASS'])
 
-        # Terminate our driver so our script will stop
-        # self.driver.quit()
-
     # Check all the links which can be found using the provided HTML
     # classes.
     def test_links(self, page, classes):
@@ -175,27 +168,32 @@ class TestDriver(object):
         # Check the status codes of the links.
         for link in links:
             data = {}
+            # Get the code from the link to see if it works.
             r = requests.head(link.get_attribute('href'))
             status = r.status_code
 
+            # Passing for 200, 301, or 302.
             if status == 200 or 301 or 302:
                 data['msg'] = f'OK: {status}'
+            # Failing for everything else.
             elif status == 404:
                 data['msg'] = f'FAIL: {status}'
             else:
                 data['msg'] = f'FAIL: {status}'
             
+            # Get our identifying attributes from the link so we can
+            # tabulate.
             DriverHelper().extract_attributes(results, data, link)
         
         return results
 
     # Given a list of HTML element ids, check if the buttons are
-    # clickable. Raise an exception if not. Tabulate the results to
-    # terminal.
+    # clickable. Raise an exception if not. Return our results to the
+    # calling method so they can be tabulated to terminal.
     def test_buttons_clickable(self, page, ids):
         # Initialize our results. This will be a list of dictionaries,
         # each dictionary corresponding to a button. Add the header row
-        # for the page.
+        # for the page to start with, using our DriverHelper class.
 
         # Set up our page header rows
         results = DriverHelper().set_page_header_rows(page)
@@ -221,23 +219,52 @@ class TestDriver(object):
                 # Set our fail message.
                 data['msg'] = 'FAIL: element is not clickable'
 
+            # Get our attributes from the html element that we want to
+            # tabulate to terminal.
             DriverHelper().extract_attributes(results, data, element)
 
         return results
 
 
 ##############################################################################
-# HELPER METHODS
+# DRIVER HELPER CLASS
 ##############################################################################
 
+
+# Set custom colors so we can color code success and fail messages in
+# our tabulated results that we print to terminal.
+class bcolors(object):
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\u001b[32m'
+    WARNING = '\033[93m'
+    FAIL = '\u001b[31m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+# Set up a driver helper class with methods for formatting headers,
+# subheaders, rows, and columns. Once formatting is complete, we will
+# print the results to terminal.
 class DriverHelper(object):
+    # Given a page name, create a subheader row out of the name with
+    # some dashes above and below it to help break up our table.
     def set_page_header_rows(self, page):
+        # Set the columns we need to fill with the page name.
         columns = ('class', 'id', 'href', 'msg')
+        # Set the page name row.
         pg_hdr = {col:f'{page.upper()} PAGE' for col in columns}
+        # Set the dashes row.
         sep_row = {col:'------------' for col in columns}
+        # Collect the rows together, with dashes above and below the
+        # page name.
         results = [sep_row, pg_hdr, sep_row]
         return results
 
+    # Given an html element, append the desired element attributes in a
+    # dictionary to our results list.
     def extract_attributes(self, results, data, element):
         # Extract pertinent label info to output to our table.
         for attr in ('class', 'href', 'id'):
@@ -249,6 +276,8 @@ class DriverHelper(object):
         # Add the button dictionary to our results list.
         results.append(data)
 
+    # Given a list of dictionaries, use the Python library, tabulate to
+    # organize our Selenium test results and print them to terminal.
     def tabulate_results(self, results):
         # Create our data rows.
         rows = []
@@ -256,6 +285,8 @@ class DriverHelper(object):
             # Extract our data.
             html_class = data['class']
             html_id = data['id']
+            # Truncate our url if it's excessivly long to keep our
+            # print output clean.
             if data['href'] == None:
                 url = data['href']
             elif len(data['href']) > 50:
