@@ -5,7 +5,8 @@
 import sys
 sys.path.append('')
 # Grab our test functionality from our main test script file.
-from selenium_driver import TestDriver, mySiteData
+from selenium_driver import TestDriver
+from data.my_site_form_data import MySiteFormData
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
 
@@ -21,13 +22,16 @@ from selenium_driver import TestDriver, mySiteData
 # different pieces of our three sites seperately. We don't necessarily
 # want to test all three sites at the same frequency.
 
-def send_email(driver):
-    driver.getURL(mySiteData)
+def submit_form(data, tdriver):
+    tdriver.getURL(data)
+    tdriver, results = tdriver.test_live_contact_form(data)
+    return(results, tdriver)
 
 if __name__ == '__main__':
     testDriver = TestDriver()
-    testDriver.getURL(mySiteData)
-    results = testDriver.test_live_contact_form(mySiteData)
+    form_data = MySiteFormData()
+    testDriver.getURL(form_data)
+    testDriver, results = testDriver.test_live_contact_form(form_data)
     testDriver.tabulate_test_results(results)
     testDriver.driver.quit()
 

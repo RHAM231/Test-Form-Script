@@ -12,6 +12,7 @@ class MySiteButtonData(object):
                     'home': 'https://rexhmitchell.com/', 
                     'portfolio': \
                         'https://rexhmitchell.com/portfolio-project/',
+                    'contact': 'https://rexhmitchell.com/contact/',
                     'about': 'https://rexhmitchell.com/about_me/'
                     }
         self.ids = {
@@ -24,6 +25,10 @@ class MySiteButtonData(object):
                     'portfolio': [
                         'github-btn-id', 'checklist-btn-id', 
                         'contact-btn-id'
+                        ],
+                    'contact': [
+                        'id_name', 'id_sender', 'id_subject', 'id_message', 
+                        'id_cc_myself', 'submit-btn-id'
                         ],
                     'about': ['contact-btn-id']
                     }

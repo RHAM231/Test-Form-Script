@@ -2,7 +2,9 @@
 # IMPORTS
 ##############################################################################
 
+from typing import Dict
 import requests
+import inspect
 
 from tabulate import tabulate
 from selenium import webdriver
@@ -48,23 +50,23 @@ class bcolors:
 
 
 # Find HTML elements by id's as well as classes, return them as a list
-def retrieveContactFormTextElements(driver):
-    name_element = driver.find_element(By.ID, mySiteData['nameID'])
-    email_element = driver.find_element(By.ID, mySiteData['senderID'])
-    subject_element = driver.find_element(By.ID, mySiteData['subjectID'])
-    message_element = driver.find_element(By.ID, mySiteData['messageID'])
+def retrieveContactFormTextElements(driver, siteData):
+    name_element = driver.find_element(By.ID, siteData.nameID)
+    email_element = driver.find_element(By.ID, siteData.senderID)
+    subject_element = driver.find_element(By.ID, siteData.subjectID)
+    message_element = driver.find_element(By.ID, siteData.messageID)
     return [name_element, email_element, subject_element, message_element]
 
 
 # Grab our questions and answers and zip them together. Fill out our
 # form with the answers and return our updated driver
 def answerContactFormTextQuestions(driver, siteData):
-    name = siteData['nameANSWER']
-    email = siteData['emailANSWER']
-    subject = siteData['subjectANSWER']
-    message = siteData['messageANSWER']
+    name = siteData.nameANSWER
+    email = siteData.emailANSWER
+    subject = siteData.subjectANSWER
+    message = siteData.messageANSWER
     answers = [name, email, subject, message]
-    questions = retrieveContactFormTextElements(driver)
+    questions = retrieveContactFormTextElements(driver, siteData)
     for a, q in zip(answers, questions):
         q.send_keys(a)
     return driver
@@ -115,7 +117,10 @@ class TestDriver(object):
     def getURL(self, siteData):
         # Get our url from our given data, initialize Selenium's
         # driver, and pass our url to driver
-        url = siteData['url']
+        if isinstance(siteData, Dict):
+            url = siteData['url']
+        elif isinstance(siteData, object):
+            url = siteData.url
         self.driver.get(url)
 
 
@@ -133,8 +138,8 @@ class TestDriver(object):
         self.driver.maximize_window()
         try:
             self.driver = answerContactFormTextQuestions(self.driver, siteData)
-            self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
-            self.driver, btn = submit(self.driver, mySiteData['submitCLASS'])
+            self.driver = answerCheckBox(self.driver, siteData.checkboxID)
+            self.driver, btn = submit(self.driver, siteData.submitCLASS)
             data['msg'] = 'Email Sent Successfully'
         except WebDriverException:
             btn = None
@@ -142,7 +147,7 @@ class TestDriver(object):
 
         self.extract_attributes(results, data, btn)
 
-        return results
+        return (self, results)
 
     
     # Run our test registration form functions above to test if a
@@ -152,7 +157,7 @@ class TestDriver(object):
         self.driver.maximize_window()
         # self.driver = \
         #     answerRegistrationFormTextQuestions(self.driver, siteData)
-        self.driver = answerCheckBox(self.driver, mySiteData['checkboxID'])
+        self.driver = answerCheckBox(self.driver, siteData.checkboxID)
         # self.driver = submit(self.driver, mySiteData['submitCLASS'])
 
         # Terminate our driver so our script will stop
@@ -303,24 +308,24 @@ HMSiteData = {
         ),
 }
 
-# The url for the contact form and the form element id's and classes
-# for my site
-mySiteData = {
-    # My contact form url
-    'url': 'https://rexhmitchell.com/contact/',
-    # My contact form html id's and classes
-    'nameID': 'id_name',
-    'senderID': 'id_sender',
-    'subjectID': 'id_subject',
-    'messageID': 'id_message',
-    'checkboxID': 'id_cc_myself',
-    'submitCLASS': 'frm-btn',
-    # My contact form automated answers
-    'nameANSWER': 'Python Test Script',
-    'emailANSWER': 'nogardjmj@gmail.com',
-    'subjectANSWER': 'Selenium Test',
-    'messageANSWER': (
-        'This is an automated test performed '
-        'by test_form.py using Selenium.'
-        ),
-}
+# # The url for the contact form and the form element id's and classes
+# # for my site
+# mySiteData = {
+#     # My contact form url
+#     'url': 'https://rexhmitchell.com/contact/',
+#     # My contact form html id's and classes
+#     'nameID': 'id_name',
+#     'senderID': 'id_sender',
+#     'subjectID': 'id_subject',
+#     'messageID': 'id_message',
+#     'checkboxID': 'id_cc_myself',
+#     'submitCLASS': 'frm-btn',
+#     # My contact form automated answers
+#     'nameANSWER': 'Python Test Script',
+#     'emailANSWER': 'nogardjmj@gmail.com',
+#     'subjectANSWER': 'Selenium Test',
+#     'messageANSWER': (
+#         'This is an automated test performed '
+#         'by test_form.py using Selenium.'
+#         ),
+# }
