@@ -1,5 +1,4 @@
-import test_site_elements
-from selenium_driver import TestDriver
+from initialize_driver import call_driver
 
 class MySiteLinkData(object):
     def __init__(self):
@@ -36,9 +35,5 @@ class MySiteLinkData(object):
                     }
 
 if __name__ == '__main__':
-    testDriver = TestDriver()
     data = MySiteLinkData()
-    tabulation, testDriver = \
-        test_site_elements.check_elements(data, testDriver)
-    testDriver.tabulate_test_results(tabulation)
-    testDriver.driver.quit()
+    call_driver(data)

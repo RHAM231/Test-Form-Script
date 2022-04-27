@@ -7,10 +7,10 @@ def check_elements(data, testDriver):
     tabulation = []
     for page, url in data.urls.items():
         testDriver.getURL({'url': url})
-        if data.classes:
+        if hasattr(data, 'classes'):
             elems_lkup = data.classes.get(page)
             results = testDriver.test_links(page, elems_lkup)
-        elif data.ids:
+        elif hasattr(data, 'ids'):
             elems_lkup = data.ids.get(page)
             results = testDriver.test_buttons_clickable(page, elems_lkup)
         tabulation = tabulation + results
