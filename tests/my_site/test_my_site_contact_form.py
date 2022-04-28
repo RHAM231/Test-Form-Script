@@ -10,7 +10,7 @@ sys.path.append('')
 ##############################################################################
 
 from selenium_driver import TestDriver, DriverHelper
-from data.my_site_form_data import MySiteFormData
+from data.ms.my_site_form_data import MySiteFormData
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
 

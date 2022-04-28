@@ -1,3 +1,8 @@
+##############################################################################
+# NO IMPORTS, BEGIN DATA CLASS
+##############################################################################
+
+
 # The url for the contact form and the form element id's and classes
 # for my site
 class MySiteFormData(object):
@@ -18,3 +23,8 @@ class MySiteFormData(object):
             'This is an automated test performed '
             'by test_form.py using Selenium.'
             )
+
+
+##############################################################################
+# END
+##############################################################################

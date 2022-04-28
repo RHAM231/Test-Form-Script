@@ -2,7 +2,6 @@
 # PTYHON IMPORTS
 ##############################################################################
 
-# Grab our parent directory so we can import from there.
 import sys
 sys.path.append('')
 
@@ -11,10 +10,10 @@ sys.path.append('')
 ##############################################################################
 
 from selenium_driver import TestDriver, DriverHelper
-from test_site_elements import check_elements
-from data.my_site_button_data import MySiteButtonData
-from data.my_site_link_data import MySiteLinkData
-from data.my_site_form_data import MySiteFormData
+from data.ms.my_site_button_data import MySiteButtonData
+from data.ms.my_site_link_data import MySiteLinkData
+from data.ms.my_site_form_data import MySiteFormData
+from tests.test_site_elements import check_elements
 from test_my_site_contact_form import submit_form
 
 ##############################################################################
