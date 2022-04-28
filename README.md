@@ -10,5 +10,9 @@ The Python file selenium_driver.py stores the main logic for testing and tabulat
 
 We'll use code from https://towardsdatascience.com/automating-submission-forms-with-python-94459353b03e as a starting point.
 
+# Sample Output
+
+![image](https://user-images.githubusercontent.com/63432972/165655892-9c763900-d3b2-4278-bfb3-ac4dbe2b81a5.png)
+
 # Build Status
 Script works for testing all links and forms for the portfolio site. Currently debugging an error with testing the Hope Medical contact and registration forms. Expanding to include tests for the Hope Medical site and Issue Tracker.
