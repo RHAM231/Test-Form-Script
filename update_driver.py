@@ -13,7 +13,6 @@ import os
 ##############################################################################
 
 
-
 # Entry point to retrieve either the local or latest version of
 # chromedriver. Our test script will try to run without downloading. If
 # that fails, it will try with the latest version of chromedriver.

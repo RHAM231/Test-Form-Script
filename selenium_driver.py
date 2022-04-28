@@ -84,6 +84,7 @@ def submit(driver, element_class):
     submit_btn.click()
     return (driver, submit_btn)
 
+
 ##############################################################################
 # SELENIUM DRIVER CLASS AND SETUP METHODS
 ##############################################################################
@@ -98,7 +99,10 @@ class TestDriver(object):
         # Get the latest version.
         # print('\n', 'Retrieving the latest version of chromedriver ...', '\n')
         # UpdateChromeDriver.get_latest_version()
-        # print('\n\n', 'Chromedriver successfully updated. Starting tests ...', '\n')
+        # print(
+        #     '\n\n', 
+        #     'Chromedriver successfully updated. Starting tests ...', '\n'
+        #     )
 
         # Add options setting to declutter log from chromedriver bug.
         # See https://stackoverflow.com/questions/64927909/failed-to-read-descriptor-from-node-connection-a-device-attached-to-the-system
