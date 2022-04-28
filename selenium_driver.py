@@ -45,7 +45,7 @@ from update_driver import UpdateChromeDriver
 ##############################################################################
 
 
-# Find HTML elements by id's as well as classes, return them as a list
+# Find HTML elements by id's. Return them as a list.
 def retrieveContactFormTextElements(driver, siteData):
     name_element = driver.find_element(By.ID, siteData.nameID)
     email_element = driver.find_element(By.ID, siteData.senderID)
@@ -57,12 +57,15 @@ def retrieveContactFormTextElements(driver, siteData):
 # Grab our questions and answers and zip them together. Fill out our
 # form with the answers and return our updated driver
 def answerContactFormTextQuestions(driver, siteData):
+    # Get our answers.
     name = siteData.nameANSWER
     email = siteData.emailANSWER
     subject = siteData.subjectANSWER
     message = siteData.messageANSWER
     answers = [name, email, subject, message]
+    # Get our questions.
     questions = retrieveContactFormTextElements(driver, siteData)
+    # Zip together.
     for a, q in zip(answers, questions):
         q.send_keys(a)
     return driver
@@ -132,21 +135,32 @@ class TestDriver(object):
     # Run our test contact form functions above to test if a contact
     # form on a given, live site is working properly
     def test_live_contact_form(self, siteData):
-        # Open the form in Chrome, fill it out, and submit it
+        # Set the subheader for our tabulation results.
         results = DriverHelper().set_page_header_rows('Contact Form')
+        # Initialize our return data.
         data = {}
         self.driver.maximize_window()
         try:
-            self.driver = answerContactFormTextQuestions(self.driver, siteData)
+            # Open the form in Chrome, fill it out, and submit it
+            self.driver = answerContactFormTextQuestions(self.driver,siteData)
             self.driver = answerCheckBox(self.driver, siteData.checkboxID)
             self.driver, btn = submit(self.driver, siteData.submitCLASS)
+            # Add a success message to our return data for tabulation.
             data['msg'] = 'Email Sent Successfully'
+        
+        # If we fail to submit the form, set btn to None to avoid
+        # breaking our extract_attributes method and attach an error
+        # message to data.
         except WebDriverException:
             btn = None
             data['msg'] = 'FAIL: email not sent'
 
+        # Get the relevant identifying information about our button.
         DriverHelper().extract_attributes(results, data, btn)
 
+        # Return driver (self) so we can terminate it in the calling
+        # method. Return results so we can tabulate them to our
+        # terminal.
         return (self, results)
 
     
@@ -254,7 +268,8 @@ class bcolors(object):
 # print the results to terminal.
 class DriverHelper(object):
     # Given a page name, create a subheader row out of the name with
-    # some dashes above and below it to help break up our table.
+    # some dashes above and below it to help break up our table, making
+    # it easy to see where failing elements are.
     def set_page_header_rows(self, page):
         # Set the columns we need to fill with the page name.
         columns = ('class', 'id', 'href', 'msg')
