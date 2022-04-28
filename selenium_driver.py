@@ -325,11 +325,13 @@ class DriverHelper(object):
             rows.append([html_class, html_id, url, result])
 
         # Tabulate our rows with its header to terminal.
+        print('\n\n', 'TABULATING TEST RESULTS ...', '\n\n')
         print(tabulate(
             rows, 
             headers=['HTML Class', 'HTML Id', 'URL', 'Result']
             ), '\n'
             )
+        print('\n\n', 'FINISHED TABULATING', '\n\n')
 
 
 ##############################################################################
