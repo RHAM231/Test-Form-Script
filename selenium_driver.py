@@ -24,6 +24,7 @@ from selenium.common.exceptions import TimeoutException
 ##############################################################################
 
 from update_driver import UpdateChromeDriver
+from status_codes import StatusCodes
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
 
@@ -184,20 +185,26 @@ class TestDriver(object):
         results = DriverHelper().set_page_header_rows(page)
 
         # Check the status codes of the links.
+        SC = StatusCodes()
         for link in links:
             data = {}
             # Get the code from the link to see if it works.
             r = requests.head(link.get_attribute('href'))
             status = r.status_code
 
-            # Passing for 200, 301, or 302.
-            if status == 200 or 301 or 302:
-                data['msg'] = f'OK: {status}'
-            # Failing for everything else.
-            elif status == 404:
-                data['msg'] = f'FAIL: {status}'
-            else:
-                data['msg'] = f'FAIL: {status}'
+            print(status, type(status))
+
+            if 100 <= status <= 199:
+                group = 'Informational'
+            elif 200 <= status <= 299:
+                group = 'Successful'
+            elif 300 <= status <= 399:
+                group = 'Successful'
+            elif 400 <= status <= 499:
+                group = 'Client Error'
+            elif 500 <= status <= 599:
+                group = 'Successful'
+            data['msg'] = f'{group}: {status}, {SC.codes[status]}'
             
             # Get our identifying attributes from the link so we can
             # tabulate.
