@@ -1,8 +1,26 @@
+##############################################################################
+# NO IMPORTS, BEGIN CLASSES
+##############################################################################
 
 
-from pprint import pprint
+# Set custom colors so we can color code success and fail messages in
+# our tabulated results that we print to terminal.
+class bcolors(object):
+    HEADER = '\033[95m'
+    OKBLUE = '\u001b[34m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\u001b[32m'
+    OKYELLOW = '\u001b[33m'
+    WARNING = '\033[93m'
+    FAIL = '\u001b[41;1m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 
+# Define a class of all possible status codes web requests can return.
+# This allows us to print the code and corresponding message to
+# terminal.
 class StatusCodes(object):
     def __init__(self):
         # 1xx Informational
@@ -51,21 +69,27 @@ class StatusCodes(object):
             511: 'Network Authentication Required'
             }
 
+    # Define a get method to color code our messages based on code
+    # type.
     def get(self, code):
+        # BLue for informational codes.
         if 100 <= code <= 199:
-            status, name = self.informational, 'Informational'
+            status, color = self.informational, bcolors.OKBLUE
+        # Green for successful codes.
         elif 200 <= code <= 299:
-            status, name = self.successful, 'Successful'
+            status, color = self.successful, bcolors.OKGREEN
+        # Yellow for redirection codes.
         elif 300 <= code <= 399:
-            status, name = self.redirection, 'Redirection'
+            status, color = self.redirection, bcolors.OKYELLOW
+        # And a background of red for client and server error codes.
         elif 400 <= code <= 499:
-            status, name = self.client_error, 'Client Error'
+            status, color = self.client_error, bcolors.FAIL
         elif 500 <= code <= 599:
-            status, name = self.server_error, 'Server Error'
-        
-        return f'{code} {status[code]} {name}'
+            status, color = self.server_error, bcolors.FAIL
+
+        return f'{color}{code} {status[code]}{bcolors.ENDC}'
 
 
-SC = StatusCodes()
-
-print(SC.get(200))
+##############################################################################
+# END
+##############################################################################

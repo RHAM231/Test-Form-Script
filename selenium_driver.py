@@ -190,22 +190,8 @@ class TestDriver(object):
             data = {}
             # Get the code from the link to see if it works.
             r = requests.head(link.get_attribute('href'))
-            status = r.status_code
-
-            print(status, type(status))
-
-            if 100 <= status <= 199:
-                group = 'Informational'
-            elif 200 <= status <= 299:
-                group = 'Successful'
-            elif 300 <= status <= 399:
-                group = 'Successful'
-            elif 400 <= status <= 499:
-                group = 'Client Error'
-            elif 500 <= status <= 599:
-                group = 'Successful'
-            data['msg'] = f'{group}: {status}, {SC.codes[status]}'
-            
+            # Set our message.
+            data['msg'] = SC.get(r.status_code)
             # Get our identifying attributes from the link so we can
             # tabulate.
             DriverHelper().extract_attributes(results, data, link)
@@ -263,6 +249,7 @@ class bcolors(object):
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
     OKGREEN = '\u001b[32m'
+    OKYELLOW = '\u001b[43;1m'
     WARNING = '\033[93m'
     FAIL = '\u001b[31m'
     ENDC = '\033[0m'
@@ -320,16 +307,16 @@ class DriverHelper(object):
             else:
                 url = data['href']
             msg = data['msg']
-            # Change the color of the result message to be green for
-            # success and red for failure.
-            if 'FAIL' in msg:
-                result = f'{bcolors.FAIL}{msg}{bcolors.ENDC}'
-            elif 'PAGE' in msg or '------------' == msg:
-                result = msg
-            else:
-                result = f'{bcolors.OKGREEN}{msg}{bcolors.ENDC}'
+            # # Change the color of the result message to be green for
+            # # success and red for failure.
+            # if 'FAIL' in msg:
+            #     result = f'{bcolors.FAIL}{msg}{bcolors.ENDC}'
+            # elif 'PAGE' in msg or '------------' == msg:
+            #     result = msg
+            # else:
+            #     result = f'{bcolors.OKGREEN}{msg}{bcolors.ENDC}'
             # Add our data to rows.
-            rows.append([html_class, html_id, url, result])
+            rows.append([html_class, html_id, url, msg])
 
         # Tabulate our rows with its header to terminal.
         print('\n\n', 'TABULATING TEST RESULTS ...', '\n\n')
