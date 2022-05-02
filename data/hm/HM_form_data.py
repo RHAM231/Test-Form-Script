@@ -1,3 +1,5 @@
+# THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
+
 # The url for the contact form and the form element id's and classes
 # for my site
 class HMFormData(object):
