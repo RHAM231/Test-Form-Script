@@ -25,6 +25,7 @@ from selenium.common.exceptions import TimeoutException
 
 from update_driver import UpdateChromeDriver
 from status_codes import StatusCodes
+from status_codes import bcolors
 
 # THIS FILE IS IN DEVELOPMENT AND DOES NOT REPRESENT A FINISHED PRODUCT
 
@@ -147,14 +148,15 @@ class TestDriver(object):
             self.driver = answerCheckBox(self.driver, siteData.checkboxID)
             self.driver, btn = submit(self.driver, siteData.submitCLASS)
             # Add a success message to our return data for tabulation.
-            data['msg'] = 'Email Sent Successfully'
+            data['msg'] = f'{bcolors.OKGREEN}\
+                Success: Email Sent{bcolors.ENDC}'
         
         # If we fail to submit the form, set btn to None to avoid
         # breaking our extract_attributes method and attach an error
         # message to data.
         except WebDriverException:
             btn = None
-            data['msg'] = 'FAIL: email not sent'
+            data['msg'] = f'{bcolors.FAIL}FAIL: email not sent{bcolors.ENDC}'
 
         # Get the relevant identifying information about our button.
         DriverHelper().extract_attributes(results, data, btn)
@@ -220,7 +222,8 @@ class TestDriver(object):
                 element = WebDriverWait(self.driver, 5).until\
                     (EC.element_to_be_clickable((By.ID, html_id)))
                 # Set our success message.
-                data['msg'] = 'Success: element is clickable'
+                data['msg'] = f'{bcolors.OKGREEN}\
+                    Success: clickable{bcolors.ENDC}'
 
             # If we were unable to click the button after the delay,
             # raise an exception.
@@ -228,7 +231,8 @@ class TestDriver(object):
                 # Get the button normally instead.
                 element = self.driver.find_element(By.ID, html_id)
                 # Set our fail message.
-                data['msg'] = 'FAIL: element is not clickable'
+                data['msg'] = f'{bcolors.FAIL}\
+                    FAIL: not clickable{bcolors.ENDC}'
 
             # Get our attributes from the html element that we want to
             # tabulate to terminal.
@@ -240,21 +244,6 @@ class TestDriver(object):
 ##############################################################################
 # DRIVER HELPER CLASS
 ##############################################################################
-
-
-# Set custom colors so we can color code success and fail messages in
-# our tabulated results that we print to terminal.
-class bcolors(object):
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\u001b[32m'
-    OKYELLOW = '\u001b[43;1m'
-    WARNING = '\033[93m'
-    FAIL = '\u001b[31m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
 
 
 # Set up a driver helper class with methods for formatting headers,
